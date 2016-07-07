@@ -43,13 +43,17 @@ func MarshalState(organisms []*sim.Organism) ([]byte, error) {
 		return nil, err
 	}
 	numBytes := len(sample) * len(organisms)
+
 	bytes := make([]byte, numBytes)
+
 	for index, organism := range organisms {
+
 		buff, err := organism.Marshal()
 		if err != nil {
 			return nil, err
 		}
-		copy(bytes[index*numBytes:], buff[0:])
+
+		copy(bytes[index*len(sample):], buff[0:])
 	}
 	return bytes, nil
 }
