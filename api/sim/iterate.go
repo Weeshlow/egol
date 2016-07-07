@@ -41,7 +41,7 @@ func RandomPosition() mgl32.Vec3 {
 	}
 }
 
-func determineNextStateType(key string, organismOfInterest *Organism, organisms map[string]*Organism) string {
+func determineNextStateType(organismKey string, organismOfInterest *Organism, organisms map[string]*Organism) string {
 	positionOfInterest := organismOfInterest.State.Position
 
 	if organismOfInterest.State.Type == deadState {
@@ -49,10 +49,10 @@ func determineNextStateType(key string, organismOfInterest *Organism, organisms 
 	}
 
 	for iterKey, organism := range organisms {
-		if iterKey == key {
+		if iterKey == organismKey {
 			continue
 		}
-		closeBy := positionOfInterest.ApproxEqualThreshold(organism.State.Position, 0.6)
+		closeBy := positionOfInterest.ApproxEqualThreshold(organism.State.Position, 0.1)
 		if closeBy && organism.State.Type != deadState {
 			return deadState
 		}
