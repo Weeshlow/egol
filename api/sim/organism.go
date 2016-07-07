@@ -21,11 +21,11 @@ type Attributes struct {
 	Family         uint32  `json:"family"`
 	Hunger         float64 `json:"hunger"`
 	Energy         float64 `json:"energy"`
-	Offense        uint32  `json:"offense"`
-	Defense        uint32  `json:"defense"`
-	Agility        uint32  `json:"agility"`
+	Offense        float64  `json:"offense"`
+	Defense        float64  `json:"defense"`
+	Agility        float64  `json:"agility"`
 	Range          float64 `json:"range"`
-	Reproductivity uint32  `json:"reproductivity"`
+	Reproductivity float64  `json:"reproductivity"`
 	Size           float64 `json:"size"`
 }
 

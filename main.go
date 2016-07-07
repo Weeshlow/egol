@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -72,12 +73,27 @@ func shouldExit() bool {
 }
 
 func initializeSim() {
-	count := 4
-	organisms = make(map[string]*sim.Organism)
+	familyCount := 4;
+	organismCount := 4;
+	families := make([]*sim.Attributes, familyCount);
+	organisms := make(map[string]*sim.Organism)
 
-	// debug states for 3 organisms
-	for i := 0; i < count; i++ {
+	for i := 0; i < familyCount; i++ {
+		families[i] = &sim.Attributes{
+			Family:            uint32(i),
+			Offense:           rand.Float64()*100,
+			Defense:           rand.Float64()*100,
+			Agility:           rand.Float64()*100,
+			Range:             rand.Float64()*100,
+			Reproductivity:    rand.Float64()*100,
+			Size:			   rand.Float64()*10,
+		}
+	}
+
+	// Initialize organisms. Add random variation from family
+	for i := 0; i < organismCount; i++ {
 		id := util.RandID()
+		family := families[rand.Intn(familyCount - 1)];
 		organisms[id] = &sim.Organism{
 			ID: id,
 			State: &sim.State{
@@ -85,15 +101,15 @@ func initializeSim() {
 				Position: sim.RandomPosition(),
 			},
 			Attributes: &sim.Attributes{
-				Family:         uint32(rand.Intn(3)),
-				Hunger:         0.0,
-				Energy:         1.0,
-				Offense:        uint32(rand.Intn(10)),
-				Defense:        uint32(rand.Intn(10)),
-				Agility:        uint32(rand.Intn(10)),
-				Range:          rand.Float64() * 100,
-				Reproductivity: uint32(rand.Intn(10)),
-				Size:           rand.Float64(),
+				Family:            family.Family,
+				Hunger:            0.0,
+				Energy:            1.0,
+				Offense:           math.Max(0, family.Offense + (rand.Float64() * 10 - 5)),
+				Defense:           math.Max(0, family.Offense + (rand.Float64() * 10 - 5)),
+				Agility:           math.Max(0, family.Offense + (rand.Float64() * 10 - 5)),
+				Range:             math.Max(0, family.Offense + (rand.Float64() * 10 - 5)),
+				Reproductivity:    math.Max(0, family.Offense + (rand.Float64() * 10 - 5)),
+				Size:			   math.Max(0, family.Offense + (rand.Float64() * 2 - 1)),
 			},
 		}
 	}
