@@ -72,27 +72,28 @@ func shouldExit() bool {
 }
 
 func initializeSim() {
-	count := 4;
+	count := 4
 	organisms = make(map[string]*sim.Organism)
 
 	// debug states for 3 organisms
 	for i := 0; i < count; i++ {
 		id := util.RandID()
 		organisms[id] = &sim.Organism{
-			ID:    id,
+			ID: id,
 			State: &sim.State{
-				Type: "alive",
+				Type:     "alive",
+				Position: sim.RandomPosition(),
 			},
 			Attributes: &sim.Attributes{
-				Family:            uint32(rand.Intn(3)),
-				Hunger:            0.0,
-				Energy:            1.0,
-				Offense:           uint32(rand.Intn(10)),
-				Defense:           uint32(rand.Intn(10)),
-				Agility:           uint32(rand.Intn(10)),
-				Range:             rand.Float64()*100,
-				Reproductivity:    uint32(rand.Intn(10)),
-				Size:			   rand.Float64(),
+				Family:         uint32(rand.Intn(3)),
+				Hunger:         0.0,
+				Energy:         1.0,
+				Offense:        uint32(rand.Intn(10)),
+				Defense:        uint32(rand.Intn(10)),
+				Agility:        uint32(rand.Intn(10)),
+				Range:          rand.Float64() * 100,
+				Reproductivity: uint32(rand.Intn(10)),
+				Size:           rand.Float64(),
 			},
 		}
 	}
@@ -250,7 +251,7 @@ func main() {
 	config = conf.ParseCommandLine()
 
 	// initialize the sim
-	initializeSim();
+	initializeSim()
 
 	// get redis connection
 	redisConn = redis.NewConnection(config.RedisHost, config.RedisPort, 0)

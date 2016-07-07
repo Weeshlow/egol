@@ -14,14 +14,19 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 		updates[organism.ID] = &Update{
 			ID: organism.ID,
 			State: &State{
-				Position: setRandomPositions(),
+				Position: RandomPosition(),
 			},
 		}
+	}
+
+	for key, organism := range organisms {
+		updates[organism.ID].State.Type = determineNextStateType(key, organism, organisms)
 	}
 	return updates
 }
 
-func setRandomPositions() mgl32.Vec3 {
+// RandomPosition returns a random vec3
+func RandomPosition() mgl32.Vec3 {
 	return mgl32.Vec3{
 		rand.Float32(),
 		rand.Float32(),
@@ -29,12 +34,15 @@ func setRandomPositions() mgl32.Vec3 {
 	}
 }
 
-func determineNextStateType(organismOfInterest *Organism, organisms map[string]*Organism) string {
+func determineNextStateType(key string, organismOfInterest *Organism, organisms map[string]*Organism) string {
 	positionOfInterest := organismOfInterest.State.Position
 
-	for _, organism := range organisms {
-		equality := positionOfInterest.ApproxEqual(organism.State.Position)
-		if equality {
+	for iterKey, organism := range organisms {
+		if iterKey == key {
+			continue
+		}
+		closeBy := positionOfInterest.ApproxEqualThreshold(organism.State.Position, 0.6)
+		if closeBy {
 			if organismOfInterest.Attributes.Energy < organism.Attributes.Energy {
 				return "dead"
 			}
