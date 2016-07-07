@@ -9,7 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-gl/mathgl/mgl32"
 	"github.com/streamrail/concurrent-map"
 	log "github.com/unchartedsoftware/plog"
 	"github.com/zenazn/goji/graceful"
@@ -29,7 +28,7 @@ const (
 
 var (
 	exit      = make(chan bool)
-	organisms []*sim.Organism
+	organisms map[string]*sim.Organism
 	redisConn *redis.Connection
 	clients   cmap.ConcurrentMap
 	config    *conf.Conf
@@ -130,7 +129,7 @@ func loop() {
 			if !client.New {
 				err := client.Conn.Send(&ws.Message{
 					Type:    "update",
-					Data:    updateBytes,
+					Data:    updates,
 					Success: true,
 				})
 				if err != nil {
@@ -141,7 +140,7 @@ func loop() {
 			if client.New {
 				err := client.Conn.Send(&ws.Message{
 					Type:    "state",
-					Data:    stateBytes,
+					Data:    organisms,
 					Success: true,
 				})
 				if err != nil {
@@ -221,7 +220,7 @@ func main() {
 	// parse flags into config struct
 	config = conf.ParseCommandLine()
 
-	organisms = make([]*sim.Organism, 3)
+	organisms = make(map[string]*sim.Organism)
 
 	// debug states for 3 organisms
 
@@ -229,27 +228,22 @@ func main() {
 		Type: "alive",
 	}
 
-	var defaultAttributes = sim.Attributes{}
-
-	organisms[0] = &sim.Organism{
-		ID:         0,
-		State:      &aliveState,
-		Attributes: &defaultAttributes,
-		Position:   mgl32.Vec3{0.0, 1.0, 0.0},
+	id := util.RandID()
+	organisms[id] = &sim.Organism{
+		ID:    id,
+		State: &aliveState,
 	}
 
-	organisms[1] = &sim.Organism{
-		ID:         0,
-		State:      &aliveState,
-		Attributes: &defaultAttributes,
-		Position:   mgl32.Vec3{0.5, 1.5, 2.0},
+	id = util.RandID()
+	organisms[id] = &sim.Organism{
+		ID:    id,
+		State: &aliveState,
 	}
 
-	organisms[2] = &sim.Organism{
-		ID:         0,
-		State:      &aliveState,
-		Attributes: &defaultAttributes,
-		Position:   mgl32.Vec3{3.0, 3.0, 3.0},
+	id = util.RandID()
+	organisms[id] = &sim.Organism{
+		ID:    id,
+		State: &aliveState,
 	}
 
 	// get redis connection

@@ -19,8 +19,8 @@
 	var viewport;
 	var listener;
 
-	var organisms;
-	var updates;
+	var organisms = {};
+	var updates = {};
 	var last;
 
 	function getWindowSize() {
@@ -48,18 +48,18 @@
 		if (update) {
 			organism = organism.interpolate(update, t);
 		}
-
-		organism.draw();
+		//organism.draw();
 	}
 
 	function processFrame() {
 		var stamp = Date.now();
 		var delta = stamp - last;
-
 		_.forIn(organisms, organism => {
+			// get update if it is available
+			var update = updates[organism.id];
+			// render the interpolated state
 			render(organism, update, delta);
 		});
-
 		requestAnimationFrame(processFrame);
 	}
 
@@ -83,20 +83,20 @@
 	function handleState(orgs) {
 		// clear current state
 		organisms = {};
-		orgs.forEach(org => {
+		_.forIn(orgs, org => {
 			organisms[org.id] = new Organism(org);
 		});
 	}
 
 	function handleUpdate(newUpdates) {
 		// apply last updates to state
-		updates.forEach(update => {
-			organisms[update.id].update(update);
+		_.forIn(updates, (update, id) => {
+			organisms[id].update(update);
 		});
 		// store new updates to interpolate to
 		updates = newUpdates;
 		// update timestamp
-		last = stamp;
+		last = Date.now();
 	}
 
 	window.start = () => {
@@ -111,12 +111,11 @@
 				'connect',
 				// message handler
 				msg => {
+					console.log(msg);
 					if (msg.type === 'state') {
-						console.log(msg);
-						handleState(msg);
+						handleState(msg.data);
 					} else if (msg.type === 'update') {
-						console.log(msg);
-						handleUpdate(msg);
+						handleUpdate(msg.data);
 					}
 				},
 				// on connections

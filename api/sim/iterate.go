@@ -8,7 +8,7 @@ import (
 )
 
 // Iterate applies one iteration of AI
-func Iterate(organisms []*Organism) []*Update {
+func Iterate(organisms map[string]*Organism) []*Update {
 
 	for _, organism := range organisms {
 		log.Info("state", organism.State)

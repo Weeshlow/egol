@@ -1,7 +1,7 @@
 package sim
 
 // ApplyConstraints updates attributes by one iteration.
-func ApplyConstraints(organisms []*Organism) {
+func ApplyConstraints(organisms map[string]*Organism) {
 	for _, organism := range organisms {
 		updateHunger(organism);
 		updateEnergy(organism);
