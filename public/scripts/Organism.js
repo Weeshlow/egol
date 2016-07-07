@@ -75,6 +75,8 @@
             switch (this.state.type) {
                 case 'alive':
                     return [0.2 * energy, 1.0 * energy, 0.3 * energy];
+                case 'reproducing':
+                    return [0.9, 0.6, 0.4];
                 case 'dead':
                     return [0.4, 0.4, 0.4];
                 default:
@@ -82,20 +84,27 @@
             }
         }
         matrix() {
+
+            var translation = this.state.position;
+
+            var rotation = glm.quat.rotateZ(
+                glm.quat.create(),
+                glm.quat.identity(glm.quat.create()),
+                this.state.rotation);
+
+            var scale = glm.vec3.fromValues(
+                this.state.size,
+                this.state.size,
+                this.state.size);
+
             return glm.mat4.fromRotationTranslationScale(
                 glm.mat4.create(),
                 // rotation
-                glm.quat.rotateZ(
-                    glm.quat.create(),
-                    glm.quat.identity(glm.quat.create()),
-                    this.state.rotation),
+                rotation,
                 // translation
-                this.state.position,
+                translation,
                 // scale
-                glm.vec3.fromValues(
-                    this.attributes.size,
-                    this.attributes.size,
-                    this.attributes.size));
+                scale);
         }
     }
 

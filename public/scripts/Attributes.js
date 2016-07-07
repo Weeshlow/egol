@@ -13,7 +13,7 @@
             this.agility = spec.agility;
             this.reproductivity = spec.reproductivity;
             // coordniate based
-            this.size = spec.size;
+            this.offspringsize = spec.offspringsize;
             this.range = spec.range;
             this.perception = spec.perception;
             this.speed = spec.speed;

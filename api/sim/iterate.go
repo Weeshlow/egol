@@ -7,10 +7,13 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 	for _, organism := range organisms {
 		// create update
 		update := &Update{
-			ID:    organism.ID,
+			ID: organism.ID,
 			State: &State{
-				Energy: organism.State.Energy,
-				Size: organism.State.Size,
+				Type:     "alive",
+				Energy:   organism.State.Energy,
+				Size:     organism.State.Size,
+				Position: organism.State.Position,
+				Rotation: organism.State.Rotation,
 			},
 		}
 

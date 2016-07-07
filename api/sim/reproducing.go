@@ -7,7 +7,7 @@ import (
 
 const (
 	baseEnergyCost = 0.2
-	baseAttempts = 5
+	baseAttempts   = 5
 )
 
 func reproduce(updates map[string]*Update, organism *Organism) {
@@ -37,6 +37,6 @@ func ReproduceAI(update *Update, updates map[string]*Update, organism *Organism,
 		reproduce(updates, organism)
 	} else {
 		// change state back to alive
-		update.State.Type = "alive";
+		update.State.Type = "alive"
 	}
 }

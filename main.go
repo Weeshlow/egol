@@ -86,10 +86,10 @@ func initializeSim() {
 			Agility:        rand.Float64() * 100,
 			Reproductivity: rand.Float64() * 100,
 			// coordniate based
-			OffspringSize:           0.05 * rand.Float64(),
-			Speed:          0.01 + (rand.Float64() * 0.1),
-			Range:          0.02 + (rand.Float64() * 0.1),
-			Perception:     0.05 + (rand.Float64() * 0.2),
+			OffspringSize: 0.025 + (rand.Float64() * 0.05),
+			Speed:         0.01 + (rand.Float64() * 0.1),
+			Range:         0.02 + (rand.Float64() * 0.1),
+			Perception:    0.05 + (rand.Float64() * 0.2),
 		}
 	}
 
@@ -145,25 +145,6 @@ func loop() {
 
 		log.Info("Iteration: ", iteration)
 
-		// apply updates to the state
-		for key, update := range updates {
-
-			if organisms[key] == nil {
-				organisms[key] = &sim.Organism{
-					ID:         update.ID,
-					State:      update.State,
-					Attributes: update.Attributes,
-				}
-			} else {
-				if update.State != nil {
-					organisms[key].State = update.State
-				}
-				if update.Attributes != nil {
-					organisms[key].Attributes = update.Attributes
-				}
-			}
-		}
-
 		for iter := range clients.Iter() {
 			client, ok := iter.Val.(*ws.Client)
 			if !ok {
@@ -192,6 +173,20 @@ func loop() {
 					log.Error(err)
 				}
 				client.New = false
+			}
+		}
+
+		// apply updates to the state before next iteration
+		for key, update := range updates {
+			if organisms[key] == nil {
+				organisms[key] = &sim.Organism{
+					ID:         update.ID,
+					State:      update.State,
+					Attributes: update.Attributes,
+				}
+			} else {
+				log.Info(update.State.Size)
+				organisms[key].Update(update)
 			}
 		}
 
