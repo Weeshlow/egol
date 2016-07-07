@@ -12,7 +12,8 @@ type State struct {
 	// attacking / defending / consuming
 	Target uint32 `json:"target,omitempty"`
 	// seeking / fleeing
-	Position mgl32.Vec3 `json:"position,omitempty"`
+	Position   mgl32.Vec3  `json:"position,omitempty"`
+	Rotation   float32     `json:"rotation,omitempty"`
 }
 
 // Attributes represents the attributes of an organism.
@@ -31,8 +32,6 @@ type Attributes struct {
 // Organism represents a single autonomous organism.
 type Organism struct {
 	ID         string      `json:"id"`
-	Position   mgl32.Vec3  `json:"position"`
-	Rotation   float32     `json:"rotation"`
 	State      *State      `json:"state"`
 	Attributes *Attributes `json:"attributes"`
 }

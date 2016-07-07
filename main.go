@@ -99,8 +99,21 @@ func initializeSim() {
 	}
 }
 
+func store(suffix string, iteration int64, data interface{}) error {
+	key := fmt.Sprintf("%s-%d-%s", config.SimID, iteration, suffix)
+	bytes, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	err = redisConn.Set(key, bytes)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func loop() {
-	iteration := 0
+	iteration := int64(0)
 
 	for {
 		// get timestamp
@@ -118,26 +131,14 @@ func loop() {
 		updates := sim.Iterate(organisms)
 
 		// write out current state
-		stateID := fmt.Sprintf("%s-%d-state", config.SimID, iteration)
-		stateBytes, err := json.Marshal(organisms)
-		if err != nil {
-			log.Error(err)
-			continue
-		}
-		err = redisConn.Set(stateID, stateBytes)
+		err := store("state", iteration, organisms)
 		if err != nil {
 			log.Error(err)
 			continue
 		}
 
-		// write out delta
-		updateID := fmt.Sprintf("%s-%d-update", config.SimID, iteration)
-		updateBytes, err := json.Marshal(updates)
-		if err != nil {
-			log.Error(err)
-			continue
-		}
-		err = redisConn.Set(updateID, updateBytes)
+		// write out updates
+		err = store("update", iteration, updates)
 		if err != nil {
 			log.Error(err)
 			continue

@@ -3,7 +3,6 @@
     'use strict';
 
     var esper = require('esper');
-    var glm = require('gl-matrix');
     var Attributes = require('./Attributes');
     var State = require('./State');
 

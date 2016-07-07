@@ -8,9 +8,6 @@
 	var Listener = require('./scripts/Listener');
 	var Organism = require('./scripts/Organism');
 
-	var FIELD_OF_VIEW = 60 * (Math.PI / 180);
-	var MIN_Z = 0.1;
-	var MAX_Z = 1000;
 	var FRAME_MS = 2000;
 
 	var canvas;
@@ -55,8 +52,6 @@
 
 		shader.setUniform('uProjectionMatrix', projection);
 		shader.setUniform('uViewMatrix', view);
-		var mat = organism.matrix();
-		// console.log(mat);
 		shader.setUniform('uModelMatrix', organism.matrix());
 
 		organism.draw();
@@ -148,8 +143,6 @@
 						processFrame();
 					});
 			});
-
-
 
 		}
 	};
