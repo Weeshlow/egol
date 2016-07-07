@@ -25,6 +25,7 @@ type Attributes struct {
 	Agility        uint32  `json:"agility"`
 	Range          float32 `json:"range"`
 	Reproductivity uint32  `json:"reproductivity"`
+	Size           float32 `json:"size"`
 }
 
 // Organism represents a single autonomous organism.
