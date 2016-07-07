@@ -52,7 +52,7 @@
             this.id = spec.id;
             this.state = new State(spec.state);
             this.attributes = new Attributes(spec.attributes);
-            this.buffer = createCircleBuffer(24);
+            this.buffer = spec.buffer || createCircleBuffer(60);
         }
         interpolate(update, t) {
             return new Organism({
@@ -74,29 +74,57 @@
             var energy = this.state.energy;
             switch (this.state.type) {
                 case 'alive':
-                    return [0.2 * energy, 1.0 * energy, 0.3 * energy];
+                    return [0.2 * energy, 1.0 * energy, 0.3 * energy, 1.0];
                 case 'reproducing':
-                    return [0.9, 0.6, 0.4];
+                    return [0.9, 0.6, 0.4, 1.0];
                 case 'dead':
-                    return [0.4, 0.4, 0.4];
+                    return [0.4, 0.4, 0.4, 1.0];
                 default:
-                    return [1.0, 1.0, 0.0];
+                    return [1.0, 1.0, 0.0, 1.0];
             }
         }
         matrix() {
-
             var translation = this.state.position;
-
             var rotation = glm.quat.rotateZ(
                 glm.quat.create(),
                 glm.quat.identity(glm.quat.create()),
                 this.state.rotation);
-
             var scale = glm.vec3.fromValues(
                 this.state.size,
                 this.state.size,
                 this.state.size);
-
+            return glm.mat4.fromRotationTranslationScale(
+                glm.mat4.create(),
+                // rotation
+                rotation,
+                // translation
+                translation,
+                // scale
+                scale);
+        }
+        perception(weight) {
+            var translation = this.state.position;
+            var rotation = glm.quat.identity(glm.quat.create());
+            var scale = glm.vec3.fromValues(
+                this.attributes.perception * weight,
+                this.attributes.perception * weight,
+                this.attributes.perception * weight);
+            return glm.mat4.fromRotationTranslationScale(
+                glm.mat4.create(),
+                // rotation
+                rotation,
+                // translation
+                translation,
+                // scale
+                scale);
+        }
+        range() {
+            var translation = this.state.position;
+            var rotation = glm.quat.identity(glm.quat.create());
+            var scale = glm.vec3.fromValues(
+                this.state.size + this.attributes.range,
+                this.state.size + this.attributes.range,
+                this.state.size + this.attributes.range);
             return glm.mat4.fromRotationTranslationScale(
                 glm.mat4.create(),
                 // rotation

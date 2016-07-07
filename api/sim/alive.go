@@ -1,7 +1,6 @@
 package sim
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/go-gl/mathgl/mgl32"
@@ -23,7 +22,6 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 		len(perception.Positions) == 0 {
 		// attempt to reproduce
 		update.State.Type = "reproducing"
-		fmt.Println("reproducing")
 	} else {
 
 		if (len(perception.DistancePairs) > 0) {

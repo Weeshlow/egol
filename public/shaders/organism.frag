@@ -1,5 +1,5 @@
-uniform highp vec3 uColor;
+uniform highp vec4 uColor;
 
 void main() {
-    gl_FragColor = vec4(uColor, 1.0);
+    gl_FragColor = vec4(uColor);
 }

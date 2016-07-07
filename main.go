@@ -88,8 +88,8 @@ func initializeSim() {
 			// coordniate based
 			OffspringSize: 0.025 + (rand.Float64() * 0.05),
 			Speed:         0.01 + (rand.Float64() * 0.1),
-			Range:         0.02 + (rand.Float64() * 0.1),
-			Perception:    0.05 + (rand.Float64() * 0.2),
+			Range:         0.01 + (rand.Float64() * 0.05),
+			Perception:    0.1 + (rand.Float64() * 0.1),
 		}
 	}
 

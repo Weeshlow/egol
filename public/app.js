@@ -53,9 +53,23 @@
 
 		shader.setUniform('uProjectionMatrix', projection);
 		shader.setUniform('uViewMatrix', view);
+
+		// draw organism
 		shader.setUniform('uModelMatrix', organism.matrix());
 		shader.setUniform('uColor', organism.color());
+		organism.draw();
 
+		// draw perception range
+		shader.setUniform('uModelMatrix', organism.perception(1));
+		shader.setUniform('uColor', [0.5, 0.5, 0.5, 0.5]);
+		organism.draw();
+		shader.setUniform('uModelMatrix', organism.perception(2));
+		shader.setUniform('uColor', [0.5, 0.5, 0.5, 0.25]);
+		organism.draw();
+
+		// draw attack ranges
+		shader.setUniform('uModelMatrix', organism.range());
+		shader.setUniform('uColor', [1.0, 0.0, 0.0, 0.25]);
 		organism.draw();
 
 		shader.pop();
@@ -89,6 +103,10 @@
 			0, 1,
 			0, 1,
 			-1, 1);
+		// webgl state
+		gl.disable(gl.DEPTH_TEST);
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	}
 
 	function handleState(orgs) {
