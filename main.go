@@ -71,6 +71,33 @@ func shouldExit() bool {
 	}
 }
 
+func initializeSim() {
+	count := 4;
+	organisms = make(map[string]*sim.Organism)
+
+	// debug states for 3 organisms
+	for i := 0; i < count; i++ {
+		id := util.RandID()
+		organisms[id] = &sim.Organism{
+			ID:    id,
+			State: &sim.State{
+				Type: "alive",
+			},
+			Attributes: &sim.Attributes{
+				Family:            uint32(rand.Intn(3)),
+				Hunger:            0.0,
+				Energy:            1.0,
+				Offense:           uint32(rand.Intn(10)),
+				Defense:           uint32(rand.Intn(10)),
+				Agility:           uint32(rand.Intn(10)),
+				Range:             rand.Float64()*100,
+				Reproductivity:    uint32(rand.Intn(10)),
+				Size:			   rand.Float64(),
+			},
+		}
+	}
+}
+
 func loop() {
 	iteration := 0
 
@@ -220,36 +247,8 @@ func main() {
 	// parse flags into config struct
 	config = conf.ParseCommandLine()
 
-	organisms = make(map[string]*sim.Organism)
-
-	// debug states for 3 organisms
-
-	id := util.RandID()
-	organisms[id] = &sim.Organism{
-		ID:    id,
-		State: &sim.State{
-			Type: "alive",
-		},
-		Attributes: &sim.Attributes{},
-	}
-
-	id = util.RandID()
-	organisms[id] = &sim.Organism{
-		ID:    id,
-		State: &sim.State{
-			Type: "alive",
-		},
-		Attributes: &sim.Attributes{},
-	}
-
-	id = util.RandID()
-	organisms[id] = &sim.Organism{
-		ID:    id,
-		State: &sim.State{
-			Type: "alive",
-		},
-		Attributes: &sim.Attributes{},
-	}
+	// initialize the sim
+	initializeSim();
 
 	// get redis connection
 	redisConn = redis.NewConnection(config.RedisHost, config.RedisPort, 0)
