@@ -10,15 +10,10 @@ import (
 // a map of changes.
 func Iterate(organisms map[string]*Organism) map[string]*Update {
 	updates := make(map[string]*Update)
-	for _, organism := range organisms {
+	for key, organism := range organisms {
 
 		if organism.State.Type == "dead" {
-			updates[organism.ID] = &Update{
-				ID: organism.ID,
-				State: &State{
-					Position: organism.State.Position,
-				},
-			}
+			continue
 		} else {
 			updates[organism.ID] = &Update{
 				ID: organism.ID,
@@ -26,13 +21,11 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 					Position: RandomPosition(),
 				},
 			}
+			updates[organism.ID].State.Type = determineNextStateType(key, organism, organisms)
 		}
 
 	}
 
-	for key, organism := range organisms {
-		updates[organism.ID].State.Type = determineNextStateType(key, organism, organisms)
-	}
 	return updates
 }
 

@@ -177,8 +177,11 @@ func loop() {
 			}
 		}
 
-		for i, organism := range organisms {
-			organism.State = updates[i].State
+		for key, update := range updates {
+			organisms[key].State = update.State
+		}
+
+		for _, organism := range organisms {
 			log.Info("organism: ", organism.State)
 		}
 
