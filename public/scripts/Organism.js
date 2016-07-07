@@ -66,6 +66,14 @@
             this.buffer.draw();
             this.buffer.unbind();
         }
+        color() {
+            switch (this.state.type) {
+                case 'alive':
+                    return [0.2, 1.0, 0.3];
+                case 'dead':
+                    return [0.4, 0.4, 0.4];
+            }
+        }
         matrix() {
             return this.state.matrix();
         }
