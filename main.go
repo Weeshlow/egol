@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"runtime"
 	"syscall"
-	"encoding/json"
 	"time"
 
 	"github.com/go-gl/mathgl/mgl32"
@@ -233,24 +232,24 @@ func main() {
 	var defaultAttributes = sim.Attributes{}
 
 	organisms[0] = &sim.Organism{
-		ID:    0,
-		State: &aliveState,
+		ID:         0,
+		State:      &aliveState,
 		Attributes: &defaultAttributes,
-		Position: mgl32.Vec3{0.0, 1.0, 0.0},
+		Position:   mgl32.Vec3{0.0, 1.0, 0.0},
 	}
 
 	organisms[1] = &sim.Organism{
-		ID:    0,
-		State: &aliveState,
+		ID:         0,
+		State:      &aliveState,
 		Attributes: &defaultAttributes,
-		Position: mgl32.Vec3{0.5, 1.5, 2.0},
+		Position:   mgl32.Vec3{0.5, 1.5, 2.0},
 	}
 
 	organisms[2] = &sim.Organism{
-		ID:    0,
-		State: &aliveState,
+		ID:         0,
+		State:      &aliveState,
 		Attributes: &defaultAttributes,
-		Position: mgl32.Vec3{3.0, 3.0, 3.0},
+		Position:   mgl32.Vec3{3.0, 3.0, 3.0},
 	}
 
 	// get redis connection
