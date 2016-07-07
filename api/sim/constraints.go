@@ -38,7 +38,7 @@ func updateEnergy(organism *Organism) {
 func updateState(organism *Organism) {
 	attributes := organism.Attributes
 
-	if attributes.Energy == 0 && attributes.Hunger == 1 {
+	if attributes.Energy <= 0 && attributes.Hunger >= 1 {
 		// organism state is dead
 		organism.State.Type = "dead"
 	}
