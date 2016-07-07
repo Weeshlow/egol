@@ -4,6 +4,7 @@ import (
 	"math/rand"
 
 	"github.com/go-gl/mathgl/mgl32"
+	log "github.com/unchartedsoftware/plog"
 )
 
 // RandomPosition returns a random vec3
@@ -60,17 +61,33 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 		runAway := false
 		if targetOrganism != nil {
 			// Check if we should be running away
-			if targetOrganism.State.Energy > organism.State.Energy {
+			if targetOrganism.State.Energy - organism.State.Energy > 0.01 {
 				runAway = true;
 			}
 		}
 		dir := organism.State.Position.Sub(targetPosition).Normalize()
 		if runAway {
+			log.Info("RUNING")
 			// move away from
 			update.State.Position = organism.State.Position.Sub(dir.Mul(float32(organism.Attributes.Speed)))
 		} else {
 			// Chase after
 			update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
+		}
+		if update.State.Position[0] < 0 {
+			update.State.Position[0] = 0
+		} else if update.State.Position[0] > 1 {
+			update.State.Position[0] = 1
+		}
+		if update.State.Position[1] < 0 {
+			update.State.Position[1] = 0
+		} else if update.State.Position[1] > 1 {
+			update.State.Position[1] = 1
+		}
+		if update.State.Position[1] < 0 {
+			update.State.Position[1] = 0
+		} else if update.State.Position[1] > 1 {
+			update.State.Position[1] = 1
 		}
 	}
 }
