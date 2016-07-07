@@ -7,26 +7,26 @@ import (
 // ApplyConstraints updates attributes by one iteration.
 func ApplyConstraints(organisms map[string]*Organism) {
 	for _, organism := range organisms {
-		updateHunger(organism);
-		updateEnergy(organism);
-		updateState(organism);
+		updateHunger(organism)
+		updateEnergy(organism)
+		updateState(organism)
 	}
 }
 
 func updateHunger(organism *Organism) {
-	attributes := organism.Attributes;
+	attributes := organism.Attributes
 
-	sizeFactor := attributes.Size * 0.001;
+	sizeFactor := attributes.Size * 0.001
 
-	attributes.Hunger += 0.01 + sizeFactor;
+	attributes.Hunger += 0.01 + sizeFactor
 }
 
 func updateEnergy(organism *Organism) {
-	attributes := organism.Attributes;
+	attributes := organism.Attributes
 
-	sizeFactor := attributes.Size * 0.001;
+	sizeFactor := attributes.Size * 0.001
 
-	attributes.Energy -= 0.01 + sizeFactor;
+	attributes.Energy -= 0.01 + sizeFactor
 
 	if attributes.Energy < 0.7 && attributes.Hunger > 0 {
 		consumedHunger := math.Min(0.01, attributes.Hunger)
@@ -36,7 +36,7 @@ func updateEnergy(organism *Organism) {
 }
 
 func updateState(organism *Organism) {
-	attributes := organism.Attributes;
+	attributes := organism.Attributes
 
 	if attributes.Energy == 0 && attributes.Hunger == 1 {
 		// organism state is dead
