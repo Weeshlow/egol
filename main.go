@@ -99,11 +99,11 @@ func initializeSim() {
 			State: &sim.State{
 				Type:     "alive",
 				Position: sim.RandomPosition(),
+				Hunger:   0.0,
+				Energy:   1.0,
 			},
 			Attributes: &sim.Attributes{
 				Family:         family.Family,
-				Hunger:         0.0,
-				Energy:         1.0,
 				Offense:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
 				Defense:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
 				Agility:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
@@ -140,10 +140,7 @@ func loop() {
 			break
 		}
 
-		// apply constraints to each organism
-		sim.ApplyConstraints(organisms)
-
-		// determine AI input for each organism
+		// apoply constraints and determine AI input for each organism
 		updates := sim.Iterate(organisms)
 
 		// write out current state

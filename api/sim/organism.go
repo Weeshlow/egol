@@ -9,11 +9,14 @@ import (
 // State represents the state of an organism.
 type State struct {
 	Type string `json:"type"`
-	// attacking / defending / consuming
-	Target uint32 `json:"target,omitempty"`
-	// seeking / fleeing
+	// position / orientation
 	Position mgl32.Vec3 `json:"position,omitempty"`
 	Rotation float32    `json:"rotation,omitempty"`
+	// health
+	Hunger float64 `json:"hunger"`
+	Energy float64 `json:"energy"`
+	// attacking / defending / consuming
+	Target uint32 `json:"target,omitempty"`
 }
 
 // Attributes represents the attributes of an organism.

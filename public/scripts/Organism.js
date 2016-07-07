@@ -67,12 +67,7 @@
             this.buffer.unbind();
         }
         color() {
-            switch (this.state.type) {
-                case 'alive':
-                    return [0.2, 1.0, 0.3];
-                case 'dead':
-                    return [0.4, 0.4, 0.4];
-            }
+            return this.state.color();
         }
         matrix() {
             return this.state.matrix();

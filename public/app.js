@@ -91,7 +91,8 @@
 	}
 
 	function handleState(orgs) {
-		// clear current state
+		// clear current state / updates
+		updates = {};
 		organisms = {};
 		_.forIn(orgs, org => {
 			organisms[org.id] = new Organism(org);
