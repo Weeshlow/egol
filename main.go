@@ -185,7 +185,6 @@ func loop() {
 					Attributes: update.Attributes,
 				}
 			} else {
-				log.Info(update.State.Size)
 				organisms[key].Update(update)
 			}
 		}

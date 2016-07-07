@@ -24,12 +24,15 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 	distPairs := make([]*DistancePair, 0)
 
 	for _, target := range targets {
+		if target.ID == organism.ID {
+			continue
+		}
 		diff := target.State.Position.Sub(organism.State.Position)
 		dist := float64(diff.Len())
 		dir := diff.Normalize()
 		distPairs = append(distPairs, &DistancePair{
 			Distance: dist,
-			Organism: *organism,
+			Organism: *target,
 		})
 		if dist <= organism.Attributes.Perception {
 			organisms = append(organisms, target)
