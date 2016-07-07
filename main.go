@@ -27,7 +27,7 @@ const (
 
 var (
 	exit      = make(chan bool)
-	organisms = make([]*sim.Organism, 0)
+	organisms []*sim.Organism
 	redisConn *redis.Connection
 	clients   cmap.ConcurrentMap
 	config    *conf.Conf
@@ -83,6 +83,7 @@ func loop() {
 		}
 
 		log.Info("Iteration: ", iteration)
+		log.Info("organisms: ", organisms)
 
 		// apply constraints to each organism
 		sim.ApplyConstraints(organisms)
@@ -216,6 +217,32 @@ func main() {
 
 	// parse flags into config struct
 	config = conf.ParseCommandLine()
+
+	organisms = make([]*sim.Organism, 3)
+
+	// var deadState = sim.State{
+	// 	Type:      0,
+	// 	Timestamp: uint64(time.Now().UnixNano()),
+	// }
+
+	var aliveState = sim.State{
+		Type: "alive",
+	}
+
+	organisms[0] = &sim.Organism{
+		ID:    0,
+		State: &aliveState,
+	}
+
+	organisms[1] = &sim.Organism{
+		ID:    0,
+		State: &aliveState,
+	}
+
+	organisms[2] = &sim.Organism{
+		ID:    0,
+		State: &aliveState,
+	}
 
 	// get redis connection
 	redisConn = redis.NewConnection(config.RedisHost, config.RedisPort, 0)
