@@ -7,48 +7,47 @@ import (
 )
 
 type PerceptionResults struct {
-	Organisms     []*Organism
-	Positions     []*mgl32.Vec3
+	Organisms     []*OrganismPair
+	Positions     []*PositionPair
 	Directions    []*mgl32.Vec3
-	DistancePairs []*DistancePair
 }
 
-type DistancePair struct {
+type OrganismPair struct {
 	Distance float64
-	Organism Organism
+	Organism *Organism
+}
+
+type PositionPair struct {
+	Distance float64
+	Position mgl32.Vec3
 }
 
 // PerceptionTest results from an organisms perception test
 func PerceptionTest(organism *Organism, targets map[string]*Organism) *PerceptionResults {
-	organisms := make([]*Organism, 0)
-	positions := make([]*mgl32.Vec3, 0)
+	organisms := make([]*OrganismPair, 0)
+	positions := make([]*PositionPair, 0)
 	directions := make([]*mgl32.Vec3, 0)
-	distPairs := make([]*DistancePair, 0)
 
 	for _, target := range targets {
 		if target.ID == organism.ID {
 			continue
 		}
 		diff := target.State.Position.Sub(organism.State.Position)
+		dir := diff.Normalize()
 		dist := float64(diff.Len())
 		// take sizes into account
 		dist = math.Max(0.0, dist-target.State.Size-organism.State.Size)
-
-		dir := diff.Normalize()
-		distPairs = append(distPairs, &DistancePair{
-			Distance: dist,
-			Organism: *target,
-		})
-
 		if dist <= organism.Attributes.Perception {
-			organisms = append(organisms, target)
-		} else {
-			organisms = append(organisms, nil)
+			organisms = append(organisms, &OrganismPair{
+				Distance: dist,
+				Position: target,
+			})
 		}
 		if dist <= organism.Attributes.Perception*2 {
-			positions = append(positions, &target.State.Position)
-		} else {
-			positions = append(positions, nil)
+			positions = append(positions, &PositionPair{
+				Distance: dist,
+				Position: target.State.Position,
+			})
 		}
 		directions = append(directions, &dir)
 	}
@@ -56,6 +55,5 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 		Organisms:     organisms,
 		Positions:     positions,
 		Directions:    directions,
-		DistancePairs: distPairs,
 	}
 }

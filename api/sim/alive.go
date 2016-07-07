@@ -4,7 +4,6 @@ import (
 	"math/rand"
 
 	"github.com/go-gl/mathgl/mgl32"
-	log "github.com/unchartedsoftware/plog"
 )
 
 // RandomPosition returns a random vec3
@@ -25,50 +24,52 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 		update.State.Type = "reproducing"
 	} else {
 
-		if len(perception.DistancePairs) > 0 {
+		var targetOrganism *Organism
+		var targetPosition *mgl32.Vec3
+		var targetDirection *mgl.Vec3
 
-			// Determine target
+		if len(perception.Organisms) > 0 {
+			// organisms in sight
 			bestScore := 0.0;
-			targetPair := perception.DistancePairs[0];
-			targetOrganism := perception.Organisms[0];
-
-			log.Info("DistancePairs", perception.DistancePairs)
-			for i, pair := range perception.DistancePairs {
-				score := 1.0;
-
-				if perception.Organisms[i] != nil {
-					score += 1;
-				}
-				if (perception.Positions[i] != nil) {
-					score += 1;
-				}
-				score += 1 - targetPair.Distance
-
+			for _, other := range perception.Organisms {
+				score += 1
+				score += 1 - other.Distance
 				if score > bestScore {
-					targetPair = pair
-					targetOrganism = perception.Organisms[i]
+					targetOrganism = other.Organism
 					bestScore = score
 				}
 			}
 
-			if targetPair != nil {
-				runAway := false
-				if targetOrganism != nil {
-					// Check if we should be running away
-					if targetPair.Organism.State.Energy > organism.State.Energy {
-						runAway = true;
-					}
-				}
-				if runAway {
-					// move away from
-					dir := organism.State.Position.Sub(targetPair.Organism.State.Position).Normalize()
-					update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
-				} else {
-					// Chase after
-					dir := organism.State.Position.Add(targetPair.Organism.State.Position).Normalize()
-					update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
+		} else if len(perception.Positions) > 0 {
+			// positions in sight
+			bestScore := 0.0;
+			for _, other := range perception.Positions {
+				score += 1
+				score += 1 - other.Distance
+				if score > bestScore {
+					target = other.Organism.Position
+					bestScore = score
 				}
 			}
+		} else if len(perception.Directions) > 0 {
+			// directions
+			target = perception.Directions[0]
+		}
+
+		runAway := false
+		if targetOrganism != nil {
+			// Check if we should be running away
+			if targetOrganism.State.Energy > organism.State.Energy {
+				runAway = true;
+			}
+		}
+		dir := organism.State.Position.Sub(targetOrganism.State.Position).Normalize()
+		if runAway {
+			// move away from
+			update.State.Position = organism.State.Position.Sub(dir.Mul(float32(organism.Attributes.Speed)))
+		} else {
+			// Chase after
+			update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
 		}
 	}
 }
