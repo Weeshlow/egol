@@ -17,15 +17,17 @@
             this.rotation = spec.rotation || 0;
         }
         interpolate(update, t) {
+            var state = update.state;
+
             // iterpolate between current state and update based on a t value from 0 to 1
             var position = this.position;
 
-            switch (update.type) {
+            switch (state.type) {
                 case 'alive':
                     // get distance vector
-                    let diff = glm.vec3.sub(glm.vec3.create(), update.position, this.position);
+                    let diff = glm.vec3.sub(glm.vec3.create(), state.position, this.position);
                     // scale by t value
-                    diff = glm.vec3.scale(diff, diff * t);
+                    diff = glm.vec3.scale(diff, diff, t);
                     // get update position
                     position = glm.vec3.add(glm.vec3.create(), this.position, diff);
                     break;
@@ -37,6 +39,17 @@
                 position: position,
                 rotation: this.rotation
             });
+        }
+        update(update) {
+            if (update.target) {
+                this.target = update.target;
+            }
+            if (update.position) {
+                this.position = update.position;
+            }
+            if (update.rotation) {
+                this.rotation = update.rotation;
+            }
         }
         matrix() {
             return glm.mat4.fromRotationTranslationScale(

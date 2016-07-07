@@ -59,16 +59,7 @@
             });
         }
         update(update) {
-            this.state = new State(update.state);
-            if (update.attributes) {
-                this.positions = update.position;
-            }
-            if (update.attributes) {
-                this.rotation = update.rotation;
-            }
-            if (update.attributes) {
-                this.attributes = update.attributes;
-            }
+            this.state.update(update.state);
         }
         draw() {
             this.buffer.bind();
