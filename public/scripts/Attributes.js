@@ -5,17 +5,18 @@
     class Attributes {
         constructor(spec) {
             if (!spec) {
-                console.log('WARNING: NO ATTRIBUTE SPEC');
-                return;
+                throw 'No attribute argument';
             }
             this.family = spec.family;
             this.offense = spec.offense;
             this.defense = spec.defense;
             this.agility = spec.agility;
-            this.range = spec.range;
             this.reproductivity = spec.reproductivity;
-            this.energy = 1.0;
-            this.hunger = 0.1;
+            // coordniate based
+            this.size = spec.size;
+            this.range = spec.range;
+            this.perception = spec.perception;
+            this.speed = spec.speed;
         }
     }
 

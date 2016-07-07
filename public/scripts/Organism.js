@@ -3,6 +3,7 @@
     'use strict';
 
     var esper = require('esper');
+    var glm = require('gl-matrix');
     var Attributes = require('./Attributes');
     var State = require('./State');
 
@@ -45,6 +46,9 @@
 
     class Organism {
         constructor(spec) {
+            if (!spec) {
+                throw 'No organism argument';
+            }
             this.id = spec.id;
             this.state = new State(spec.state);
             this.attributes = new Attributes(spec.attributes);
@@ -67,10 +71,31 @@
             this.buffer.unbind();
         }
         color() {
-            return this.state.color();
+            var energy = this.state.energy;
+            switch (this.state.type) {
+                case 'alive':
+                    return [0.2 * energy, 1.0 * energy, 0.3 * energy];
+                case 'dead':
+                    return [0.4, 0.4, 0.4];
+                default:
+                    return [1.0, 1.0, 0.0];
+            }
         }
         matrix() {
-            return this.state.matrix();
+            return glm.mat4.fromRotationTranslationScale(
+                glm.mat4.create(),
+                // rotation
+                glm.quat.rotateZ(
+                    glm.quat.create(),
+                    glm.quat.identity(glm.quat.create()),
+                    this.state.rotation),
+                // translation
+                this.state.position,
+                // scale
+                glm.vec3.fromValues(
+                    this.attributes.size,
+                    this.attributes.size,
+                    this.attributes.size));
         }
     }
 

@@ -6,9 +6,11 @@
 
     class State {
         constructor(spec) {
+            if (!spec) {
+                throw 'No state argument';
+            }
             this.type = spec.type;
-            // health
-            this.hunger = (spec.hunger !== undefined) ? spec.hunger : 0.0;
+            // energy
             this.energy = (spec.energy !== undefined) ? spec.energy : 1.0;
             // attacking / defending / consuming
             this.target = spec.target;
@@ -53,30 +55,6 @@
             if (update.rotation) {
                 this.rotation = update.rotation;
             }
-        }
-        color() {
-            var health = (1 - this.hunger) * this.energy;
-            switch (this.type) {
-                case 'alive':
-                    return [0.2 * health, 1.0 * health, 0.3 * health];
-                case 'dead':
-                    return [0.4, 0.4, 0.4];
-                default:
-                    return [1.0, 1.0, 0.0];
-            }
-        }
-        matrix() {
-            return glm.mat4.fromRotationTranslationScale(
-                glm.mat4.create(),
-                // rotation
-                glm.quat.rotateZ(
-                    glm.quat.create(),
-                    glm.quat.identity(glm.quat.create()),
-                    this.rotation),
-                // translation
-                this.position,
-                // scale
-                glm.vec3.fromValues(0.05, 0.05, 0.05));
         }
     }
 

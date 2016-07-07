@@ -30,12 +30,13 @@ type Attributes struct {
 	Offense        float64 `json:"offense"`
 	Defense        float64 `json:"defense"`
 	Agility        float64 `json:"agility"`
-	Range          float64 `json:"range"`
-	Perception     float64 `json:"perception"`
 	Reproductivity float64 `json:"reproductivity"`
 	OffspringSize  float64 `json:"offspringSize"`
-	// calculate these based on above
-	Speed float64 `json:"speed"`
+	// coordinate based
+	Range      float64 `json:"range"`
+	Perception float64 `json:"perception"`
+	Speed      float64 `json:"speed"`
+	Size       float64 `json:"size"`
 }
 
 // Organism represents a single autonomous organism.
@@ -50,7 +51,7 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 	return Organism{
 		ID: id,
 		State: &State{
-			Type:     "alive",
+			Type: "alive",
 			Position: mgl32.Vec3{
 				rand.Float32(),
 				rand.Float32(),
