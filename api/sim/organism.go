@@ -18,14 +18,14 @@ type State struct {
 // Attributes represents the attributes of an organism.
 type Attributes struct {
 	Family         uint32  `json:"family"`
-	Hunger         float32 `json:"hunger"`
-	Energy         float32 `json:"energy"`
+	Hunger         float64 `json:"hunger"`
+	Energy         float64 `json:"energy"`
 	Offense        uint32  `json:"offense"`
 	Defense        uint32  `json:"defense"`
 	Agility        uint32  `json:"agility"`
-	Range          float32 `json:"range"`
+	Range          float64 `json:"range"`
 	Reproductivity uint32  `json:"reproductivity"`
-	Size           float32 `json:"size"`
+	Size           float64 `json:"size"`
 }
 
 // Organism represents a single autonomous organism.

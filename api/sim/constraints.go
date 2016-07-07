@@ -16,7 +16,7 @@ func ApplyConstraints(organisms map[string]*Organism) {
 func updateHunger(organism *Organism) {
 	attributes := organism.Attributes;
 
-	sizeFactor = attributes.Size * 0.001;
+	sizeFactor := attributes.Size * 0.001;
 
 	attributes.Hunger += 0.01 + sizeFactor;
 }
@@ -24,12 +24,12 @@ func updateHunger(organism *Organism) {
 func updateEnergy(organism *Organism) {
 	attributes := organism.Attributes;
 
-	sizeFactor = attributes.Size * 0.001;
+	sizeFactor := attributes.Size * 0.001;
 
 	attributes.Energy -= 0.01 + sizeFactor;
 
 	if attributes.Energy < 0.7 && attributes.Hunger > 0 {
-		consumedHunger = math.Min(0.01, attributes.Hunger)
+		consumedHunger := math.Min(0.01, attributes.Hunger)
 		attributes.Hunger -= consumedHunger
 		attributes.Energy += consumedHunger * 2
 	}

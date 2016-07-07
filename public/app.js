@@ -17,8 +17,8 @@
 	var view;
 	var projection;
 	var viewport;
+	var shader;
 	var listener;
-
 	var organisms = {};
 	var updates = {};
 	var last;
@@ -31,7 +31,7 @@
 		};
 	}
 
-	window.addEventListener('resize', () => {
+	function onResize() {
 		if (viewport) {
 			var size = getWindowSize();
 			viewport.resize(size.width , size.height);
@@ -42,7 +42,9 @@
 				MIN_Z,
 				MAX_Z);
 		}
-	});
+	}
+
+	window.addEventListener('resize', onResize);
 
 	function render(organism, update, t) {
 		if (update) {
@@ -106,25 +108,36 @@
 		gl = esper.WebGLContext.get(canvas);
 		// only continue if WebGL is available
 		if (gl) {
-			// create websocket connection
-			listener = new Listener(
-				'connect',
-				// message handler
-				msg => {
-					console.log(msg);
-					if (msg.type === 'state') {
-						handleState(msg.data);
-					} else if (msg.type === 'update') {
-						handleUpdate(msg.data);
-					}
-				},
-				// on connections
-				() => {
-					// initiaze rendering
-					initializeState();
-					// initiate draw loop
-					processFrame();
-				});
+
+			initializeState();
+
+			shader = new esper.Shader({
+				vert: 'shaders/organism.vert',
+				frag: 'shaders/organism.frag'
+			}, function() {
+				// create websocket connection
+				listener = new Listener(
+					'connect',
+					// message handler
+					msg => {
+						console.log(msg);
+						if (msg.type === 'state') {
+							handleState(msg.data);
+						} else if (msg.type === 'update') {
+							handleUpdate(msg.data);
+						}
+					},
+					// on connections
+					() => {
+						// initiaze rendering
+						initializeState();
+						// initiate draw loop
+						processFrame();
+					});
+			});
+
+
+
 		}
 	};
 
