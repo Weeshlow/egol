@@ -1,62 +1,26 @@
 package sim
 
-import (
-	"math/rand"
-
-	"github.com/go-gl/mathgl/mgl32"
-)
-
-const aliveState = "alive"
-const deadState = "dead"
-
 // Iterate applies one iteration of AI and returns the change in state as
 // a map of changes.
 func Iterate(organisms map[string]*Organism) map[string]*Update {
 	updates := make(map[string]*Update)
-	for key, organism := range organisms {
+	for _, organism := range organisms {
 
-		if organism.State.Type == deadState {
-			continue
-		} else {
-			updates[organism.ID] = &Update{
-				ID: organism.ID,
-				State: &State{
-					Position: RandomPosition(),
-				},
-			}
-			updates[organism.ID].State.Type = determineNextStateType(key, organism, organisms)
+		// create update
+		update := &Update{
+			ID:    organism.ID,
+			State: &State{},
 		}
+
+		// apply constraints
+		ApplyConstraints(update, organism)
+
+		// apply ai
+		ApplyAI(update, organism, PerceptionTest(organism, organisms))
+
+		updates[organism.ID] = update
 
 	}
 
 	return updates
-}
-
-// RandomPosition returns a random vec3
-func RandomPosition() mgl32.Vec3 {
-	return mgl32.Vec3{
-		rand.Float32(),
-		rand.Float32(),
-		rand.Float32(),
-	}
-}
-
-func determineNextStateType(organismKey string, organismOfInterest *Organism, organisms map[string]*Organism) string {
-	positionOfInterest := organismOfInterest.State.Position
-
-	if organismOfInterest.State.Type == deadState {
-		return deadState
-	}
-
-	for iterKey, organism := range organisms {
-		if iterKey == organismKey {
-			continue
-		}
-		closeBy := positionOfInterest.ApproxEqualThreshold(organism.State.Position, 0.1)
-		if closeBy && organism.State.Type != deadState {
-			return deadState
-		}
-	}
-
-	return aliveState
 }

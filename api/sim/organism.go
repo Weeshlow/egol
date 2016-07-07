@@ -28,6 +28,7 @@ type Attributes struct {
 	Defense        float64 `json:"defense"`
 	Agility        float64 `json:"agility"`
 	Range          float64 `json:"range"`
+	Perception 	   float64 `json:"perception"`
 	Reproductivity float64 `json:"reproductivity"`
 	Size           float64 `json:"size"`
 }
