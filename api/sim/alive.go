@@ -69,10 +69,10 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 		if runAway {
 			log.Info("RUNING")
 			// move away from
-			update.State.Position = organism.State.Position.Sub(dir.Mul(float32(organism.Attributes.Speed)))
+			update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
 		} else {
 			// Chase after
-			update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
+			update.State.Position = organism.State.Position.Sub(dir.Mul(float32(organism.Attributes.Speed)))
 		}
 		if update.State.Position[0] < 0 {
 			update.State.Position[0] = 0

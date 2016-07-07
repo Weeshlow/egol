@@ -29,7 +29,7 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 	directions := make([]mgl32.Vec3, 0)
 
 	for _, target := range targets {
-		if target.ID == organism.ID {
+		if target.ID == organism.ID || target.State.Type == "dead" {
 			continue
 		}
 		diff := target.State.Position.Sub(organism.State.Position)
