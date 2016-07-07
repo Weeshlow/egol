@@ -14,7 +14,6 @@ import (
 	log "github.com/unchartedsoftware/plog"
 	"github.com/zenazn/goji/graceful"
 	"github.com/zenazn/goji/web"
-	"github.com/go-gl/mathgl/mgl32"
 
 	"github.com/unchartedsoftware/egol/api/conf"
 	"github.com/unchartedsoftware/egol/api/middleware"

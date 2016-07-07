@@ -49,20 +49,24 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 		ID: id,
 		State: &State{
 			Type:     "alive",
-			Position: RandomPosition(),
+			Position: mgl32.Vec3{
+				rand.Float32(),
+				rand.Float32(),
+				rand.Float32(),
+			},
 			Energy:   1.0,
 		},
 		Attributes: &Attributes{
 			Family:         baseAttributes.Family,
 			Offense:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Defense:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Agility:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Reproductivity: math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
+			Defense:        math.Max(0, baseAttributes.Defense+(rand.Float64()*10-5)),
+			Agility:        math.Max(0, baseAttributes.Agility+(rand.Float64()*10-5)),
+			Reproductivity: math.Max(0, baseAttributes.Reproductivity+(rand.Float64()*10-5)),
 			// coordniate based
-			Size:           math.Max(0, family.Size+(rand.Float64()*mutation)),
-			Speed:          math.Max(0, family.Speed+(rand.Float64()*mutation)),
-			Perception:     math.Max(0, family.Perception+(rand.Float64()*mutation)),
-			Range:          math.Max(0, family.Range+(rand.Float64()*mutation)),
+			Size:           math.Max(0, baseAttributes.Size+rand.Float64()*0.02-0.01),
+			Speed:          math.Max(0, baseAttributes.Speed+rand.Float64()*0.02-0.01),
+			Perception:     math.Max(0, baseAttributes.Perception+rand.Float64()*0.02-0.01),
+			Range:          math.Max(0, baseAttributes.Range+rand.Float64()*0.02-0.01),
 		},
 	}
 }
