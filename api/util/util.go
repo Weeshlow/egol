@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-
-	"github.com/unchartedsoftware/egol/api/sim"
 )
 
 // RandString returns a random string of length N.

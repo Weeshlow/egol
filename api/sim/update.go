@@ -6,8 +6,8 @@ import (
 
 // Update reprsents a single iterations update.
 type Update struct {
-	OrganismID uint32
-	State      State
+	ID    uint32 `json:"id"`
+	State State  `json:"state"`
 }
 
 // Marshal returns the byte representation of an update.

@@ -17,22 +17,22 @@ type State struct {
 
 // Attributes represents the attributes of an organism.
 type Attributes struct {
-	Family         uint32 `json:"family"`
+	Family         uint32  `json:"family"`
 	Hunger         float32 `json:"hunger"`
 	Energy         float32 `json:"energy"`
-	Offense        uint32 `json:"offense"`
-	Defense        uint32 `json:"defense"`
-	Agility        uint32 `json:"agility"`
+	Offense        uint32  `json:"offense"`
+	Defense        uint32  `json:"defense"`
+	Agility        uint32  `json:"agility"`
 	Range          float32 `json:"range"`
-	Reproductivity uint32 `json:"reproductivity"`
+	Reproductivity uint32  `json:"reproductivity"`
 }
 
 // Organism represents a single autonomous organism.
 type Organism struct {
-	ID         uint32 `json:"id"`
-	Position   mgl32.Vec3 `json:"position"`
-	Rotation   float32 `json:"rotation"`
-	State      *State `json:"state"`
+	ID         uint32      `json:"id"`
+	Position   mgl32.Vec3  `json:"position"`
+	Rotation   float32     `json:"rotation"`
+	State      *State      `json:"state"`
 	Attributes *Attributes `json:"attributes"`
 }
 

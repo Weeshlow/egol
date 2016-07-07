@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"net/http"
@@ -82,9 +83,6 @@ func loop() {
 			break
 		}
 
-		log.Info("Iteration: ", iteration)
-		log.Info("organisms: ", organisms)
-
 		// apply constraints to each organism
 		sim.ApplyConstraints(organisms)
 
@@ -116,6 +114,10 @@ func loop() {
 			log.Error(err)
 			continue
 		}
+
+		log.Info("Iteration: ", iteration)
+		log.Info("organisms: ", organisms)
+		log.Info("updates: ", updates)
 
 		for iter := range clients.Iter() {
 			client, ok := iter.Val.(*ws.Client)
@@ -220,10 +222,7 @@ func main() {
 
 	organisms = make([]*sim.Organism, 3)
 
-	// var deadState = sim.State{
-	// 	Type:      0,
-	// 	Timestamp: uint64(time.Now().UnixNano()),
-	// }
+	// debug states for 3 organisms
 
 	var aliveState = sim.State{
 		Type: "alive",

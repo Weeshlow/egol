@@ -2,6 +2,7 @@
 
 	'use strict';
 
+	var _ = require('lodash');
 	var esper = require('esper');
 	var glm = require('gl-matrix');
 	var Listener = require('./scripts/Listener');
@@ -21,43 +22,6 @@
 	var organisms;
 	var updates;
 	var last;
-
-	function createCircleBuffer(numSegments) {
-		var COMPONENT_BYTE_SIZE = 4;
-        var theta = (2 * Math.PI) / numSegments;
-        var radius = 1.0;
-        // precalculate sine and cosine
-        var c = Math.cos(theta);
-        var s = Math.sin(theta);
-        var t;
-        // start at angle = 0
-        var x = radius;
-        var y = 0;
-        var buffer = new ArrayBuffer((numSegments + 2) * 2 * COMPONENT_BYTE_SIZE);
-        var positions = new Float32Array(buffer);
-        positions[0] = 0;
-        positions[1] = 0;
-        positions[positions.length-2] = radius;
-        positions[positions.length-1] = 0;
-        for(var i = 0; i < numSegments; i++) {
-            positions[(i+1)*2] = x;
-            positions[(i+1)*2+1] = y;
-            // apply the rotation
-            t = x;
-            x = c * x - s * y;
-            y = s * t + c * y;
-        }
-        var pointers = {
-			0: {
-	            size: 2,
-	            type: 'FLOAT'
-	        }
-		};
-        var options = {
-            mode: 'TRIANGLE_FAN'
-        };
-        return new esper.VertexBuffer(positions, pointers, options);
-    }
 
 	function getWindowSize() {
 		var devicePixelRatio = window.devicePixelRatio || 1;
@@ -80,12 +44,22 @@
 		}
 	});
 
+	function render(organism, update, t) {
+		if (update) {
+			organism = organism.interpolate(update, t);
+		}
+
+		organism.draw();
+	}
+
 	function processFrame() {
 		var stamp = Date.now();
 		var delta = stamp - last;
 
+		_.forIn(organisms, organism => {
+			render(organism, update, delta);
+		});
 
-		last = stamp;
 		requestAnimationFrame(processFrame);
 	}
 
@@ -121,6 +95,8 @@
 		});
 		// store new updates to interpolate to
 		updates = newUpdates;
+		// update timestamp
+		last = stamp;
 	}
 
 	window.start = () => {
