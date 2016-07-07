@@ -17,9 +17,6 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 		// apply constraints
 		ApplyConstraints(update, organism)
 
-		// attempt reproduction
-		Reproduce(updates, organism)
-
 		// apply ai
 		ApplyAI(update, updates, organism, PerceptionTest(organism, organisms))
 

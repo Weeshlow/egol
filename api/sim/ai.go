@@ -5,9 +5,12 @@ func ApplyAI(update *Update, updates map[string]*Update, organism *Organism, per
 	switch (organism.State.Type) {
 		case "alive":
 			AliveAI(update, updates, organism, perception)
-			break;
+			break
+		case "reproducing":
+			ReproduceAI(update, updates, organism, perception)
+			break
 		case "dead":
 			DeadAI(update, updates, organism, perception)
-			break;
+			break
 	}
 }
