@@ -23,7 +23,7 @@ func reproduce(updates map[string]*Update, organism *Organism) {
 				State:      offspring.State,
 				Attributes: offspring.Attributes,
 			}
-			organism.State.Energy = math.Max(0, organism.State.Energy-energyCost)
+			updates[organism.ID].State.Energy = math.Max(0, updates[organism.ID].State.Energy-energyCost)
 		}
 	}
 }
