@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"runtime"
 	"syscall"
+	"encoding/json"
 	"time"
 
 	"github.com/streamrail/concurrent-map"
@@ -228,19 +229,24 @@ func main() {
 		Type: "alive",
 	}
 
+	var defaultAttributes = sim.Attributes{}
+
 	organisms[0] = &sim.Organism{
 		ID:    0,
 		State: &aliveState,
+		Attributes: &defaultAttributes,
 	}
 
 	organisms[1] = &sim.Organism{
 		ID:    0,
 		State: &aliveState,
+		Attributes: &defaultAttributes,
 	}
 
 	organisms[2] = &sim.Organism{
 		ID:    0,
 		State: &aliveState,
+		Attributes: &defaultAttributes,
 	}
 
 	// get redis connection
