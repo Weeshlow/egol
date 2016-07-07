@@ -57,9 +57,12 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 			Offense:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
 			Defense:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
 			Agility:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Range:          math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
 			Reproductivity: math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Size:           math.Max(0, baseAttributes.Offense+(rand.Float64()*2-1)),
+			// coordniate based
+			Size:           math.Max(0, family.Size+(rand.Float64()*mutation)),
+			Speed:          math.Max(0, family.Speed+(rand.Float64()*mutation)),
+			Perception:     math.Max(0, family.Perception+(rand.Float64()*mutation)),
+			Range:          math.Max(0, family.Range+(rand.Float64()*mutation)),
 		},
 	}
 }

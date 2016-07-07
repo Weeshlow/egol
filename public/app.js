@@ -23,16 +23,17 @@
 
 	function getWindowSize() {
 		var devicePixelRatio = window.devicePixelRatio || 1;
-		return {
-			width: window.innerWidth * devicePixelRatio,
-			height: window.innerHeight * devicePixelRatio
-		};
+		return window.innerWidth * devicePixelRatio;
+		// return {
+		// 	width: window.innerWidth * devicePixelRatio,
+		// 	height: window.innerHeight * devicePixelRatio
+		// };
 	}
 
 	function onResize() {
 		if (viewport) {
 			var size = getWindowSize();
-			viewport.resize(size.width , size.height);
+			viewport.resize(size, size);
 			projection = glm.mat4.ortho(
 				projection,
 				0, 1,
@@ -79,7 +80,7 @@
 		var size = getWindowSize();
 		// viewport
 		viewport = new esper.Viewport();
-		viewport.resize(size.width, size.height);
+		viewport.resize(size, size);
 		// view matrix
 		view = glm.mat4.create(1);
 		// projection matrix
