@@ -8,7 +8,7 @@
 	var Listener = require('./scripts/Listener');
 	var Organism = require('./scripts/Organism');
 
-	var FRAME_MS = 2000;
+	var FRAME_MS = 1000;
 
 	var canvas;
 	var gl;
