@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"math"
+	//"math"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -92,26 +92,9 @@ func initializeSim() {
 
 	// Initialize organisms. Add random variation from family
 	for i := 0; i < organismCount; i++ {
-		id := util.RandID()
 		family := families[rand.Intn(familyCount-1)]
-		organisms[id] = &sim.Organism{
-			ID: id,
-			State: &sim.State{
-				Type:     "alive",
-				Position: sim.RandomPosition(),
-				Hunger:   0.0,
-				Energy:   1.0,
-			},
-			Attributes: &sim.Attributes{
-				Family:         family.Family,
-				Offense:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Defense:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Agility:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Range:          math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Reproductivity: math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Size:           math.Max(0, family.Offense+(rand.Float64()*2-1)),
-			},
-		}
+		organism := sim.NewOrganism(family)
+		organisms[organism.ID] = &organism
 	}
 }
 
