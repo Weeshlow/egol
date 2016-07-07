@@ -11,7 +11,12 @@ import (
 func Iterate(organisms map[string]*Organism) map[string]*Update {
 	updates := make(map[string]*Update)
 	for _, organism := range organisms {
-		update := ApplyConstraints(organism)
+		update := &Update{
+			ID:    organism.ID,
+			State: &State{},
+		}
+		attemptReproduction(update, &updates, organism, organisms)
+		ApplyConstraints(update, organism)
 		if organism.State.Type == "alive" {
 			update.State.Position = RandomPosition()
 		}
@@ -48,4 +53,24 @@ func determineNextStateType(key string, organismOfInterest *Organism, organisms 
 	}
 
 	return "alive"
+}
+
+// Reproductivity determines the amount and frequency of offspring
+func attemptReproduction(update *Update, updates *map[string]*Update, organism *Organism, organisms map[string]*Organism) {
+	attributes := organism.Attributes
+	offspringProbability := attributes.Reproductivity / 400
+	
+	if rand.Float64() < offspringProbability {
+		numberOffspring := int(attributes.Reproductivity / 30)
+
+		for i := 0; i < numberOffspring; i++ {
+			offspring := NewOrganism(organism.Attributes);
+			organisms[offspring.ID] = &offspring;
+			updates[offspring.ID] = &Update{
+				ID: offspring.ID,
+				State: offspring.State,
+				Attributes: offspring.Attributes
+			}
+		}
+	}
 }

@@ -5,11 +5,8 @@ import (
 )
 
 // ApplyConstraints updates attributes by one iteration.
-func ApplyConstraints(organism *Organism) *Update {
-	update := &Update{
-		ID:    organism.ID,
-		State: &State{},
-	}
+func ApplyConstraints(update *Update, organism *Organism) *Update {
+
 	updateHunger(update, organism)
 	updateEnergy(update, organism)
 	updateState(update, organism)
@@ -44,7 +41,7 @@ func updateState(update *Update, organism *Organism) {
 
 	if state.Energy <= 0 && state.Hunger >= 1 {
 		// organism state is dead
-		organism.State.Type = "dead"
+		update.State.Type = "dead"
 	}
 
 }
