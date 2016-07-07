@@ -16,8 +16,7 @@ type State struct {
 	// position / orientation
 	Position mgl32.Vec3 `json:"position,omitempty"`
 	Rotation float32    `json:"rotation,omitempty"`
-	// health
-	Hunger float64 `json:"hunger"`
+	// energy
 	Energy float64 `json:"energy"`
 	// attacking / defending / consuming
 	Target uint32 `json:"target,omitempty"`
@@ -26,14 +25,15 @@ type State struct {
 // Attributes represents the attributes of an organism.
 type Attributes struct {
 	Family         uint32  `json:"family"`
-	Hunger         float64 `json:"hunger"`
-	Energy         float64 `json:"energy"`
 	Offense        float64 `json:"offense"`
 	Defense        float64 `json:"defense"`
 	Agility        float64 `json:"agility"`
 	Range          float64 `json:"range"`
+	Perception     float64 `json:"perception"`
 	Reproductivity float64 `json:"reproductivity"`
-	Size           float64 `json:"size"`
+	// calculate these based on above
+	Speed float64 `json:"speed"`
+	Size  float64 `json:"size"`
 }
 
 // Organism represents a single autonomous organism.
@@ -50,7 +50,6 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 		State: &State{
 			Type:     "alive",
 			Position: RandomPosition(),
-			Hunger:   0.0,
 			Energy:   1.0,
 		},
 		Attributes: &Attributes{

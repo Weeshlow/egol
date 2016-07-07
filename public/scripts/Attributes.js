@@ -4,6 +4,9 @@
 
     class Attributes {
         constructor(spec) {
+            if (!spec) {
+                return;
+            }
             this.family = spec.family;
             this.offense = spec.offense;
             this.defense = spec.defense;

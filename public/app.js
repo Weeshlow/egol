@@ -102,7 +102,11 @@
 	function handleUpdate(newUpdates) {
 		// apply last updates to state
 		_.forIn(updates, (update, id) => {
-			organisms[id].update(update);
+			if (!organisms[id]) {
+				organisms[id] = new Organism(update);
+			} else {
+				organisms[id].update(update);
+			}
 		});
 		// store new updates to interpolate to
 		updates = newUpdates;

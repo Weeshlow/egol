@@ -173,8 +173,13 @@ func loop() {
 			}
 		}
 
+		// apply updates tot he state
 		for key, update := range updates {
 			organisms[key].State = update.State
+
+			if update.Attributes != nil {
+				organisms[key].Attributes = update.Attributes
+			}
 		}
 
 		for _, organism := range organisms {
