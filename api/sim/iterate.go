@@ -37,6 +37,10 @@ func RandomPosition() mgl32.Vec3 {
 func determineNextStateType(key string, organismOfInterest *Organism, organisms map[string]*Organism) string {
 	positionOfInterest := organismOfInterest.State.Position
 
+	if organismOfInterest.State.Type == "dead" {
+		return "dead"
+	}
+
 	for iterKey, organism := range organisms {
 		if iterKey == key {
 			continue

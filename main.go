@@ -145,10 +145,6 @@ func loop() {
 		}
 
 		log.Info("Iteration: ", iteration)
-		for i := range organisms {
-			// log.Info("organisms: ", organisms[i].State)
-			log.Info("updates: ", updates[i].State)
-		}
 
 		for iter := range clients.Iter() {
 			client, ok := iter.Val.(*ws.Client)
@@ -179,6 +175,11 @@ func loop() {
 				}
 				client.New = false
 			}
+		}
+
+		for i, organism := range organisms {
+			organism.State = updates[i].State
+			log.Info("organism: ", organism.State)
 		}
 
 		// wait
