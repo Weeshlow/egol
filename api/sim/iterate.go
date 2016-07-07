@@ -12,7 +12,10 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 		// create update
 		update := &Update{
 			ID:    organism.ID,
-			State: &State{},
+			State: &State{
+				Energy: organism.State.Energy,
+				Size: organism.State.Size,
+			},
 		}
 
 		// attempt reproduction
@@ -39,9 +42,11 @@ func attemptReproduction(update *Update, updates map[string]*Update, organism *O
 	if rand.Float64() < offspringProbability {
 		numberOffspring := int(attributes.Reproductivity / 30)
 
+		update.State.Size = update.State.Size * (1 - 0.1 * float64(numberOffspring))
+		update.State.Energy = update.State.Energy - 0.1 * float64(numberOffspring)
+
 		for i := 0; i < numberOffspring; i++ {
-			offspring := NewOrganism(organism.Attributes);
-			offspring.State.Position = organism.State.Position;
+			offspring := SpawnChild(organism);
 			
 			updates[offspring.ID] = &Update{
 				ID: offspring.ID,

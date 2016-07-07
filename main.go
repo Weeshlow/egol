@@ -86,7 +86,6 @@ func initializeSim() {
 			Agility:        rand.Float64() * 100,
 			Range:          rand.Float64() * 100,
 			Reproductivity: rand.Float64() * 100,
-			Size:           rand.Float64() * 10,
 		}
 	}
 

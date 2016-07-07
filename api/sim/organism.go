@@ -13,6 +13,8 @@ import (
 // State represents the state of an organism.
 type State struct {
 	Type string `json:"type"`
+	// physical traits
+	Size  float64 `json:"size"`
 	// position / orientation
 	Position mgl32.Vec3 `json:"position,omitempty"`
 	Rotation float32    `json:"rotation,omitempty"`
@@ -33,7 +35,6 @@ type Attributes struct {
 	Reproductivity float64 `json:"reproductivity"`
 	// calculate these based on above
 	Speed float64 `json:"speed"`
-	Size  float64 `json:"size"`
 }
 
 // Organism represents a single autonomous organism.
@@ -51,6 +52,7 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 			Type:     "alive",
 			Position: RandomPosition(),
 			Energy:   1.0,
+			Size:     rand.Float64()*50,
 		},
 		Attributes: &Attributes{
 			Family:         baseAttributes.Family,
@@ -59,9 +61,16 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 			Agility:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
 			Range:          math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
 			Reproductivity: math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Size:           math.Max(0, baseAttributes.Offense+(rand.Float64()*2-1)),
 		},
 	}
+}
+
+func SpawnChild(organism *Organism) Organism {
+	offspring := NewOrganism(organism.Attributes);
+	offspring.State.Position = organism.State.Position;
+	offspring.State.Size = organism.State.Size * 0.1;
+	
+	return offspring;
 }
 
 // Marshal returns the byte representation of an organism.

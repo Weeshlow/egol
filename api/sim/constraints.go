@@ -8,9 +8,8 @@ func ApplyConstraints(update *Update, organism *Organism) {
 }
 
 func updateEnergy(update *Update, organism *Organism) {
-	attributes := organism.Attributes
-	state := organism.State
-	sizeFactor := attributes.Size * 0.001
+	state := update.State
+	sizeFactor := state.Size * 0.001
 	update.State.Energy = state.Energy - (0.01 + sizeFactor)
 }
 
