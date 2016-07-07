@@ -50,7 +50,6 @@
             this.energy = update.energy;
             this.position = update.position;
             this.rotation = update.rotation;
-            console.log(this);
         }
     }
 

@@ -20,7 +20,7 @@ func offenseVsDefense(attacker *Organism, defender *Organism) bool {
 func Attack(attacker *Organism, defender *Organism) bool {
 	diff := defender.State.Position.Sub(attacker.State.Position)
 	dist := float64(diff.Len())
-	if dist - defender.State.Size > attacker.State.Size + attacker.Attributes.Range {
+	if dist-defender.State.Size > attacker.State.Size+attacker.Attributes.Range {
 		// out of range
 		return false
 	}

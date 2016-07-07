@@ -25,7 +25,7 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 		update.State.Type = "reproducing"
 	} else {
 
-		if (len(perception.DistancePairs) > 0) {
+		if len(perception.DistancePairs) > 0 {
 
 			// Determine target
 			bestScore := 0.0;

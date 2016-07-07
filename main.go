@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	//"math"
+	"math"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -73,6 +73,7 @@ func shouldExit() bool {
 }
 
 func initializeSim() {
+
 	familyCount := 4
 	organismCount := 4
 	families := make([]*sim.Attributes, familyCount)
@@ -84,7 +85,7 @@ func initializeSim() {
 			Offense:        rand.Float64() * 100,
 			Defense:        rand.Float64() * 100,
 			Agility:        rand.Float64() * 100,
-			Reproductivity: rand.Float64() * 100,
+			Reproductivity: math.Min(0.1, math.Max(0.9, rand.Float64())),
 			// coordniate based
 			OffspringSize: 0.025 + (rand.Float64() * 0.05),
 			Speed:         0.01 + (rand.Float64() * 0.1),
@@ -97,7 +98,7 @@ func initializeSim() {
 	for i := 0; i < organismCount; i++ {
 		family := families[rand.Intn(familyCount-1)]
 		organism := sim.NewOrganism(family)
-		organisms[organism.ID] = &organism
+		organisms[organism.ID] = organism
 	}
 }
 
@@ -133,6 +134,7 @@ func loop() {
 		err := store("state", iteration, organisms)
 		if err != nil {
 			log.Error(err)
+			time.Sleep(time.Duration(1000) * time.Millisecond)
 			continue
 		}
 
@@ -140,6 +142,7 @@ func loop() {
 		err = store("update", iteration, updates)
 		if err != nil {
 			log.Error(err)
+			time.Sleep(time.Duration(1000) * time.Millisecond)
 			continue
 		}
 

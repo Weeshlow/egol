@@ -106,9 +106,9 @@
             var translation = this.state.position;
             var rotation = glm.quat.identity(glm.quat.create());
             var scale = glm.vec3.fromValues(
-                this.attributes.perception * weight,
-                this.attributes.perception * weight,
-                this.attributes.perception * weight);
+                this.state.size + this.attributes.perception * weight,
+                this.state.size + this.attributes.perception * weight,
+                this.state.size + this.attributes.perception * weight);
             return glm.mat4.fromRotationTranslationScale(
                 glm.mat4.create(),
                 // rotation

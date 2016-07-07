@@ -1,6 +1,8 @@
 package sim
 
 import (
+	"math"
+
 	"github.com/go-gl/mathgl/mgl32"
 )
 
@@ -29,6 +31,9 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 		}
 		diff := target.State.Position.Sub(organism.State.Position)
 		dist := float64(diff.Len())
+		// take sizes into account
+		dist = math.Max(0.0, dist-target.State.Size-organism.State.Size)
+
 		dir := diff.Normalize()
 		distPairs = append(distPairs, &DistancePair{
 			Distance: dist,
@@ -40,7 +45,7 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 		} else {
 			organisms = append(organisms, nil)
 		}
-		if dist >= organism.Attributes.Perception*2 {
+		if dist <= organism.Attributes.Perception*2 {
 			positions = append(positions, &target.State.Position)
 		} else {
 			positions = append(positions, nil)

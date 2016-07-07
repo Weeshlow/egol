@@ -1,6 +1,7 @@
 package sim
 
 import (
+	"fmt"
 	"encoding/json"
 	"math"
 	"math/rand"
@@ -45,10 +46,14 @@ type Organism struct {
 	Attributes *Attributes `json:"attributes"`
 }
 
-func NewOrganism(baseAttributes *Attributes) Organism {
-	id := util.RandID()
-	return Organism{
-		ID: id,
+func mutate(value, variance, min, max float64) float64 {
+	mutation := (rand.Float64() * (variance * 2)) - variance
+	return math.Min(max, math.Max(min, value+mutation))
+}
+
+func NewOrganism(baseAttributes *Attributes) *Organism {
+	return &Organism{
+		ID: util.RandID(),
 		State: &State{
 			Type: "alive",
 			Position: mgl32.Vec3{
@@ -58,34 +63,51 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 			},
 			Rotation: 0.0,
 			Energy:   1.0,
-			Size:     baseAttributes.OffspringSize,
+			Size:     mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
 		},
 		Attributes: &Attributes{
 			Family:         baseAttributes.Family,
-			Offense:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Defense:        math.Max(0, baseAttributes.Defense+(rand.Float64()*10-5)),
-			Agility:        math.Max(0, baseAttributes.Agility+(rand.Float64()*10-5)),
-			Reproductivity: math.Max(0, baseAttributes.Reproductivity+(rand.Float64()*0.02-0.01)),
+			Offense:        mutate(baseAttributes.Offense, 5, 0, math.MaxFloat64),
+			Defense:        mutate(baseAttributes.Defense, 5, 0, math.MaxFloat64),
+			Agility:        mutate(baseAttributes.Agility, 5, 0, math.MaxFloat64),
+			Reproductivity: mutate(baseAttributes.Reproductivity, 0.01, 0.1, 0.9),
 			// coordniate based
-			OffspringSize: math.Max(0, baseAttributes.OffspringSize+(rand.Float64()*0.02-0.01)),
-			Speed:         math.Max(0, baseAttributes.Speed+(rand.Float64()*0.02-0.01)),
-			Perception:    math.Max(0, baseAttributes.Perception+(rand.Float64()*0.02-0.01)),
-			Range:         math.Max(0, baseAttributes.Range+(rand.Float64()*0.02-0.01)),
+			OffspringSize: mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
+			Speed:         mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
+			Perception:    mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
+			Range:         mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
 		},
 	}
 }
 
 func (o *Organism) Update(update *Update) {
-	// state
+	o.State.Type = update.State.Type
 	o.State.Size = update.State.Size
 	o.State.Position = update.State.Position
 	o.State.Rotation = update.State.Rotation
 	o.State.Energy = update.State.Energy
 }
 
-func SpawnChild(organism *Organism) Organism {
-	offspring := NewOrganism(organism.Attributes)
-	offspring.State.Position = organism.State.Position
+func (o *Organism) Spawn() *Organism {
+	offspring := NewOrganism(o.Attributes)
+	offspring.State.Position = o.State.Position
+	fmt.Printf("%v\n", offspring.ID)
+	fmt.Println();
+	fmt.Printf("%v\n", offspring.State.Type)
+	fmt.Printf("%v\n", offspring.State.Size)
+	fmt.Printf("%v\n", offspring.State.Position)
+	fmt.Printf("%v\n", offspring.State.Rotation)
+	fmt.Printf("%v\n", offspring.State.Energy)
+	fmt.Println();
+	fmt.Printf("%v\n", offspring.Attributes.Family)
+	fmt.Printf("%v\n", offspring.Attributes.Offense)
+	fmt.Printf("%v\n", offspring.Attributes.Defense)
+	fmt.Printf("%v\n", offspring.Attributes.Agility)
+	fmt.Printf("%v\n", offspring.Attributes.Reproductivity)
+	fmt.Printf("%v\n", offspring.Attributes.OffspringSize)
+	fmt.Printf("%v\n", offspring.Attributes.Speed)
+	fmt.Printf("%v\n", offspring.Attributes.Perception)
+	fmt.Printf("%v\n", offspring.Attributes.Range)
 	return offspring
 }
 
