@@ -62,7 +62,7 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 				rand.Float32(),
 			},
 			Rotation: 0.0,
-			Energy:   1.0,
+			Energy:   0.8 + rand.Float64() * 0.2,
 			Size:     mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
 		},
 		Attributes: &Attributes{
@@ -73,9 +73,9 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 			Reproductivity: mutate(baseAttributes.Reproductivity, 0.01, 0.1, 0.9),
 			// coordniate based
 			OffspringSize: mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
-			Speed:         mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
-			Perception:    mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
-			Range:         mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
+			Speed:         mutate(baseAttributes.Speed, 0.01, 0, 1.0),
+			Perception:    mutate(baseAttributes.Perception, 0.01, 0, 1.0),
+			Range:         mutate(baseAttributes.Range, 0.01, 0, 1.0),
 		},
 	}
 }
