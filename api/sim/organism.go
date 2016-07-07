@@ -72,10 +72,10 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 			Agility:        mutate(baseAttributes.Agility, 5, 0, math.MaxFloat64),
 			Reproductivity: mutate(baseAttributes.Reproductivity, 0.01, 0.1, 0.9),
 			// coordniate based
-			OffspringSize: mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
-			Speed:         mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
-			Perception:    mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
-			Range:         mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
+			OffspringSize: mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
+			Speed:         mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
+			Perception:    mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
+			Range:         mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
 		},
 	}
 }
