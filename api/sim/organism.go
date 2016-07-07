@@ -33,6 +33,7 @@ type Attributes struct {
 	Range          float64 `json:"range"`
 	Perception     float64 `json:"perception"`
 	Reproductivity float64 `json:"reproductivity"`
+	OffspringSize  float64 `json:"offspringSize"`
 	// calculate these based on above
 	Speed float64 `json:"speed"`
 }
@@ -50,17 +51,25 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 		ID: id,
 		State: &State{
 			Type:     "alive",
-			Position: RandomPosition(),
+			Position: mgl32.Vec3{
+				rand.Float32(),
+				rand.Float32(),
+				rand.Float32(),
+			},
 			Energy:   1.0,
-			Size:     rand.Float64()*50,
+			Size:     baseAttributes.OffspringSize,
 		},
 		Attributes: &Attributes{
 			Family:         baseAttributes.Family,
 			Offense:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Defense:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Agility:        math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Range:          math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
-			Reproductivity: math.Max(0, baseAttributes.Offense+(rand.Float64()*10-5)),
+			Defense:        math.Max(0, baseAttributes.Defense+(rand.Float64()*10-5)),
+			Agility:        math.Max(0, baseAttributes.Agility+(rand.Float64()*10-5)),
+			Reproductivity: math.Max(0, baseAttributes.Reproductivity+(rand.Float64()*10-5)),
+			// coordniate based
+			OffspringSize:  math.Max(0, baseAttributes.OffspringSize+rand.Float64()*0.02-0.01),
+			Speed:          math.Max(0, baseAttributes.Speed+rand.Float64()*0.02-0.01),
+			Perception:     math.Max(0, baseAttributes.Perception+rand.Float64()*0.02-0.01),
+			Range:          math.Max(0, baseAttributes.Range+rand.Float64()*0.02-0.01),
 		},
 	}
 }
@@ -68,7 +77,6 @@ func NewOrganism(baseAttributes *Attributes) Organism {
 func SpawnChild(organism *Organism) Organism {
 	offspring := NewOrganism(organism.Attributes);
 	offspring.State.Position = organism.State.Position;
-	offspring.State.Size = organism.State.Size * 0.1;
 	
 	return offspring;
 }

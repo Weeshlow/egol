@@ -84,8 +84,12 @@ func initializeSim() {
 			Offense:        rand.Float64() * 100,
 			Defense:        rand.Float64() * 100,
 			Agility:        rand.Float64() * 100,
-			Range:          rand.Float64() * 100,
 			Reproductivity: rand.Float64() * 100,
+			// coordniate based
+			OffspringSize:           0.05 * rand.Float64(),
+			Speed:          0.01 + (rand.Float64() * 0.1),
+			Range:          0.02 + (rand.Float64() * 0.1),
+			Perception:     0.05 + (rand.Float64() * 0.2),
 		}
 	}
 
