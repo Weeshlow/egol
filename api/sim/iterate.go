@@ -50,10 +50,8 @@ func determineNextStateType(key string, organismOfInterest *Organism, organisms 
 			continue
 		}
 		closeBy := positionOfInterest.ApproxEqualThreshold(organism.State.Position, 0.6)
-		if closeBy {
-			if organismOfInterest.Attributes.Energy < organism.Attributes.Energy {
-				return "dead"
-			}
+		if closeBy && organism.State.Type != "dead" {
+			return "dead"
 		}
 	}
 
