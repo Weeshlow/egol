@@ -93,7 +93,7 @@ func loop() {
 
 		// write out current state
 		stateID := fmt.Sprintf("%s-%d-state", config.SimID, iteration)
-		stateBytes, err := util.MarshalState(organisms)
+		stateBytes, err := json.Marshal(organisms)
 		if err != nil {
 			log.Error(err)
 			continue
@@ -106,7 +106,7 @@ func loop() {
 
 		// write out delta
 		updateID := fmt.Sprintf("%s-%d-update", config.SimID, iteration)
-		updateBytes, err := util.MarshalUpdates(updates)
+		updateBytes, err := json.Marshal(updates)
 		if err != nil {
 			log.Error(err)
 			continue
