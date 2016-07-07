@@ -16,7 +16,7 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 		}
 
 		// attempt reproduction
-		attemptReproduction(update, updates, organism, organisms)
+		attemptReproduction(update, updates, organism)
 		
 		// apply constraints
 		ApplyConstraints(update, organism)
@@ -32,16 +32,16 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 }
 
 // Reproductivity determines the amount and frequency of offspring
-func attemptReproduction(update *Update, updates map[string]*Update, organism *Organism, organisms map[string]*Organism) {
+func attemptReproduction(update *Update, updates map[string]*Update, organism *Organism) {
 	attributes := organism.Attributes
-	offspringProbability := attributes.Reproductivity / 1200
+	offspringProbability := attributes.Reproductivity / 800
 	
 	if rand.Float64() < offspringProbability {
 		numberOffspring := int(attributes.Reproductivity / 30)
 
 		for i := 0; i < numberOffspring; i++ {
 			offspring := NewOrganism(organism.Attributes);
-			organisms[offspring.ID] = &offspring;
+			offspring.State.Position = organism.State.Position;
 			
 			updates[offspring.ID] = &Update{
 				ID: offspring.ID,

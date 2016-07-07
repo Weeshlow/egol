@@ -5,6 +5,7 @@
     class Attributes {
         constructor(spec) {
             if (!spec) {
+                console.log('WARNING: NO ATTRIBUTE SPEC');
                 return;
             }
             this.family = spec.family;

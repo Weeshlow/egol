@@ -142,6 +142,25 @@ func loop() {
 
 		log.Info("Iteration: ", iteration)
 
+		// apply updates to the state
+		for key, update := range updates {
+
+			if organisms[key] == nil {
+				organisms[key] = &sim.Organism{
+					ID:         update.ID,
+					State:      update.State,
+					Attributes: update.Attributes,
+				}
+			} else {
+				if update.State != nil {
+					organisms[key].State = update.State
+				}
+				if update.Attributes != nil {
+					organisms[key].Attributes = update.Attributes
+				}
+			}
+		}
+
 		for iter := range clients.Iter() {
 			client, ok := iter.Val.(*ws.Client)
 			if !ok {
@@ -171,19 +190,6 @@ func loop() {
 				}
 				client.New = false
 			}
-		}
-
-		// apply updates tot he state
-		for key, update := range updates {
-			organisms[key].State = update.State
-
-			if update.Attributes != nil {
-				organisms[key].Attributes = update.Attributes
-			}
-		}
-
-		for _, organism := range organisms {
-			log.Info("organism: ", organism.State)
 		}
 
 		// wait
