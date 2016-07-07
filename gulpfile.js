@@ -49,7 +49,6 @@
 				}
 				var updateStart = Date.now();
 				watcher.bundle()
-					.transform(babel, {presets: ['es2015']})
 					.on('error', handleError)
 					.pipe(source(PROJECT_NAME + '.js'))
 					// This is where you add uglifying etc.
@@ -59,7 +58,6 @@
 			bundler = watcher;
 		}
 		return bundler
-			.transform(babel, {presets: ['es2015']})
 			.bundle() // Create the initial bundle when starting the task
 			.on('error', handleError)
 			.pipe(source(PROJECT_NAME + '.js'))
@@ -83,7 +81,7 @@
 			bundler = browserify(paths.webappRoot, {
 				debug: true,
 				standalone: PROJECT_NAME
-			});
+			}).transform(babel, {presets: ['es2015']});
 		return bundle(bundler, true);
 	});
 

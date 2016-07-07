@@ -9,6 +9,10 @@ import (
 // State represents the state of an organism.
 type State struct {
 	Type string
+	// attacking / defending / consuming
+	Target uint32
+	// seeking / fleeing
+	Position mgl32.Vec3
 }
 
 // Attributes represents the attributes of an organism.
