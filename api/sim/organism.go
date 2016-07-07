@@ -1,7 +1,6 @@
 package sim
 
 import (
-	"fmt"
 	"encoding/json"
 	"math"
 	"math/rand"
@@ -13,16 +12,11 @@ import (
 
 // State represents the state of an organism.
 type State struct {
-	Type string `json:"type"`
-	// physical traits
-	Size float64 `json:"size"`
-	// position / orientation
+	Type     string     `json:"type"`
+	Size     float64    `json:"size"`
 	Position mgl32.Vec3 `json:"position"`
 	Rotation float64    `json:"rotation"`
-	// energy
-	Energy float64 `json:"energy"`
-	// attacking / defending / consuming
-	// Target uint32 `json:"target,omitempty"`
+	Energy   float64    `json:"energy"`
 }
 
 // Attributes represents the attributes of an organism.
@@ -91,23 +85,6 @@ func (o *Organism) Update(update *Update) {
 func (o *Organism) Spawn() *Organism {
 	offspring := NewOrganism(o.Attributes)
 	offspring.State.Position = o.State.Position
-	fmt.Printf("%v\n", offspring.ID)
-	fmt.Println();
-	fmt.Printf("%v\n", offspring.State.Type)
-	fmt.Printf("%v\n", offspring.State.Size)
-	fmt.Printf("%v\n", offspring.State.Position)
-	fmt.Printf("%v\n", offspring.State.Rotation)
-	fmt.Printf("%v\n", offspring.State.Energy)
-	fmt.Println();
-	fmt.Printf("%v\n", offspring.Attributes.Family)
-	fmt.Printf("%v\n", offspring.Attributes.Offense)
-	fmt.Printf("%v\n", offspring.Attributes.Defense)
-	fmt.Printf("%v\n", offspring.Attributes.Agility)
-	fmt.Printf("%v\n", offspring.Attributes.Reproductivity)
-	fmt.Printf("%v\n", offspring.Attributes.OffspringSize)
-	fmt.Printf("%v\n", offspring.Attributes.Speed)
-	fmt.Printf("%v\n", offspring.Attributes.Perception)
-	fmt.Printf("%v\n", offspring.Attributes.Range)
 	return offspring
 }
 

@@ -17,9 +17,9 @@ type PositionPair struct {
 }
 
 type PerceptionResults struct {
-	Organisms     []*OrganismPair
-	Positions     []*PositionPair
-	Directions    []mgl32.Vec3
+	Organisms  []*OrganismPair
+	Positions  []*PositionPair
+	Directions []mgl32.Vec3
 }
 
 // PerceptionTest results from an organisms perception test

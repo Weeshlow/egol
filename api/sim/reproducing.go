@@ -16,13 +16,13 @@ func reproduce(update *Update, updates map[string]*Update, organism *Organism) {
 	for i := 0; i < baseAttempts; i++ {
 		if rand.Float64() < attributes.Reproductivity {
 			// successfully create child
-			//offspring := organism.Spawn()
+			offspring := organism.Spawn()
 			// add to updates
-			// updates[offspring.ID] = &Update{
-			// 	ID:         offspring.ID,
-			// 	State:      offspring.State,
-			// 	Attributes: offspring.Attributes,
-			// }
+			updates[offspring.ID] = &Update{
+				ID:         offspring.ID,
+				State:      offspring.State,
+				Attributes: offspring.Attributes,
+			}
 		} else {
 			energyCost *= 0.5
 		}
