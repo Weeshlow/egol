@@ -1,23 +1,29 @@
 package sim
 
 import (
+	"math"
 	"math/rand"
+)
+
+const (
+	baseEnergyCost = 0.2
+	baseAttempts = 5
 )
 
 func reproduce(updates map[string]*Update, organism *Organism) {
 	attributes := organism.Attributes
-	offspringProbability := attributes.Reproductivity / 800
-	if rand.Float64() < offspringProbability {
-		numberOffspring := int(attributes.Reproductivity / 30)
-		for i := 0; i < numberOffspring; i++ {
+	energyCost := (baseEnergyCost * attributes.Reproductivity)
+	for i := 0; i < baseAttempts; i++ {
+		if rand.Float64() < attributes.Reproductivity {
+			// successfully create child
 			offspring := NewOrganism(organism.Attributes)
 			offspring.State.Position = organism.State.Position
-
 			updates[offspring.ID] = &Update{
 				ID:         offspring.ID,
 				State:      offspring.State,
 				Attributes: offspring.Attributes,
 			}
+			organism.State.Energy = math.Max(0, organism.State.Energy-energyCost)
 		}
 	}
 }
