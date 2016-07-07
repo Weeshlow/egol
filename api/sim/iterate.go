@@ -6,16 +6,27 @@ import (
 	"github.com/go-gl/mathgl/mgl32"
 )
 
+const aliveState = "alive"
+const deadState = "dead"
+
 // Iterate applies one iteration of AI and returns the change in state as
 // a map of changes.
 func Iterate(organisms map[string]*Organism) map[string]*Update {
 	updates := make(map[string]*Update)
-	for _, organism := range organisms {
-		update := ApplyConstraints(organism)
-		if organism.State.Type == "alive" {
-			update.State.Position = RandomPosition()
+	for key, organism := range organisms {
+
+		if organism.State.Type == deadState {
+			continue
+		} else {
+			updates[organism.ID] = &Update{
+				ID: organism.ID,
+				State: &State{
+					Position: RandomPosition(),
+				},
+			}
+			updates[organism.ID].State.Type = determineNextStateType(key, organism, organisms)
 		}
-		updates[organism.ID] = update
+
 	}
 
 	return updates
@@ -33,8 +44,8 @@ func RandomPosition() mgl32.Vec3 {
 func determineNextStateType(key string, organismOfInterest *Organism, organisms map[string]*Organism) string {
 	positionOfInterest := organismOfInterest.State.Position
 
-	if organismOfInterest.State.Type == "dead" {
-		return "dead"
+	if organismOfInterest.State.Type == deadState {
+		return deadState
 	}
 
 	for iterKey, organism := range organisms {
@@ -42,10 +53,10 @@ func determineNextStateType(key string, organismOfInterest *Organism, organisms 
 			continue
 		}
 		closeBy := positionOfInterest.ApproxEqualThreshold(organism.State.Position, 0.6)
-		if closeBy && organism.State.Type != "dead" {
-			return "dead"
+		if closeBy && organism.State.Type != deadState {
+			return deadState
 		}
 	}
 
-	return "alive"
+	return aliveState
 }
