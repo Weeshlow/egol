@@ -8,7 +8,7 @@ import (
 
 const (
 	aliveState = "alive"
-	deadState = "dead"
+	deadState  = "dead"
 )
 
 // RandomPosition returns a random vec3

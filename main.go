@@ -99,7 +99,6 @@ func initializeSim() {
 			State: &sim.State{
 				Type:     "alive",
 				Position: sim.RandomPosition(),
-				Hunger:   0.0,
 				Energy:   1.0,
 			},
 			Attributes: &sim.Attributes{
@@ -190,6 +189,7 @@ func loop() {
 			}
 		}
 
+		// apply updates tot he state
 		for key, update := range updates {
 			organisms[key].State = update.State
 		}

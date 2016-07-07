@@ -1,7 +1,6 @@
 package sim
 
 import (
-
 	"github.com/go-gl/mathgl/mgl32"
 )
 
@@ -22,15 +21,15 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 		dir := diff.Normalize()
 		if dist <= organism.Attributes.Perception {
 			organisms = append(organisms, target)
-		} else if (dist >= organism.Attributes.Perception * 2) {
+		} else if dist >= organism.Attributes.Perception*2 {
 			positions = append(positions, &target.State.Position)
 		} else {
 			directions = append(directions, &dir)
 		}
 	}
 	return &PerceptionResults{
-		Organisms: organisms,
-		Positions: positions,
+		Organisms:  organisms,
+		Positions:  positions,
 		Directions: directions,
 	}
 }
