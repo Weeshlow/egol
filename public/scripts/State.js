@@ -61,6 +61,8 @@
                     return [0.2 * health, 1.0 * health, 0.3 * health];
                 case 'dead':
                     return [0.4, 0.4, 0.4];
+                default:
+                    return [1.0, 1.0, 0.0];
             }
         }
         matrix() {
