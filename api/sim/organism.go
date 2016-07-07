@@ -8,8 +8,7 @@ import (
 
 // State represents the state of an organism.
 type State struct {
-	Type      uint32
-	Timestamp uint64
+	Type string
 }
 
 // Attributes represents the attributes of an organism.
