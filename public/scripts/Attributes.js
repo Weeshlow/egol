@@ -12,6 +12,7 @@
             this.defense = spec.defense;
             this.agility = spec.agility;
             this.reproductivity = spec.reproductivity;
+            this.growthRate = spec.growthRate;
             // coordniate based
             this.offspringsize = spec.offspringsize;
             this.range = spec.range;

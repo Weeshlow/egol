@@ -23,6 +23,8 @@
                 spec.position.z || spec.position[2] || 0) : glm.vec3.create();
             // rotation
             this.rotation = spec.rotation || 0;
+            // Maturity
+            this.maturity = spec.maturity;
         }
         interpolate(update, t) {
             var state = update.state;
@@ -50,6 +52,7 @@
             this.energy = update.energy;
             this.position = update.position;
             this.rotation = update.rotation;
+            this.maturity = update.maturity;
         }
     }
 

@@ -4,7 +4,6 @@ import (
 	"math/rand"
 
 	"github.com/go-gl/mathgl/mgl32"
-	log "github.com/unchartedsoftware/plog"
 )
 
 // RandomPosition returns a random vec3
@@ -16,15 +15,33 @@ func RandomPosition() mgl32.Vec3 {
 	}
 }
 
+func clampToBounds(vec *mgl32.Vec3) {
+	if vec[0] < 0 {
+		vec[0] = 0
+	} else if vec[0] > 1 {
+		vec[0] = 1
+	}
+	if vec[1] < 0 {
+		vec[1] = 0
+	} else if vec[1] > 1 {
+		vec[1] = 1
+	}
+	if vec[2] < 0 {
+		vec[2] = 0
+	} else if vec[2] > 1 {
+		vec[2] = 1
+	}
+}
+
 // AliveAI processes the organism for the given state
 func AliveAI(update *Update, updates map[string]*Update, organism *Organism, perception *PerceptionResults) {
 	if organism.State.Energy > 0.5 &&
+		organism.State.Maturity > 0.5 &&
 		len(perception.Organisms) == 0 &&
 		len(perception.Positions) == 0 {
 		// attempt to reproduce
 		update.State.Type = "reproducing"
 	} else {
-
 		var targetOrganism *Organism
 		var targetPosition mgl32.Vec3
 
@@ -33,6 +50,9 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 			// organisms in sight
 			bestScore := 0.0;
 			for _, other := range perception.Organisms {
+				if other.Organism.Attributes.Family == organism.Attributes.Family {
+					continue;
+				}
 				score += 1
 				score += 1 - other.Distance
 				if score > bestScore {
@@ -65,29 +85,21 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 				runAway = true;
 			}
 		}
-		dir := organism.State.Position.Sub(targetPosition).Normalize()
-		if runAway {
-			log.Info("RUNING")
-			// move away from
-			update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
-		} else {
-			// Chase after
-			update.State.Position = organism.State.Position.Sub(dir.Mul(float32(organism.Attributes.Speed)))
-		}
-		if update.State.Position[0] < 0 {
-			update.State.Position[0] = 0
-		} else if update.State.Position[0] > 1 {
-			update.State.Position[0] = 1
-		}
-		if update.State.Position[1] < 0 {
-			update.State.Position[1] = 0
-		} else if update.State.Position[1] > 1 {
-			update.State.Position[1] = 1
-		}
-		if update.State.Position[1] < 0 {
-			update.State.Position[1] = 0
-		} else if update.State.Position[1] > 1 {
-			update.State.Position[1] = 1
+		position := organism.State.Position
+		diff := position.Sub(targetPosition)
+		dist := position.Len()
+		if (dist > 0.0) {
+			dir := diff.Normalize()
+			speed := float32(organism.Attributes.Speed)
+			velocity := dir.Mul(speed)
+			if runAway {
+				// move away from
+				update.State.Position = organism.State.Position.Add(velocity)
+			} else {
+				// Chase after
+				update.State.Position = organism.State.Position.Sub(velocity)
+			}
+			clampToBounds(&update.State.Position);
 		}
 	}
 }

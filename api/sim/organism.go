@@ -17,6 +17,7 @@ type State struct {
 	Position mgl32.Vec3 `json:"position"`
 	Rotation float64    `json:"rotation"`
 	Energy   float64    `json:"energy"`
+	Maturity float64    `json:"maturity"`
 }
 
 // Attributes represents the attributes of an organism.
@@ -26,6 +27,7 @@ type Attributes struct {
 	Defense        float64 `json:"defense"`
 	Agility        float64 `json:"agility"`
 	Reproductivity float64 `json:"reproductivity"`
+	GrowthRate     float64 `json:"growthRate"`
 	OffspringSize  float64 `json:"offspringSize"`
 	// coordinate based
 	Range      float64 `json:"range"`
@@ -55,9 +57,10 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 				rand.Float32(),
 				rand.Float32(),
 			},
+			Maturity: 0.0,
 			Rotation: 0.0,
 			Energy:   0.8 + rand.Float64() * 0.2,
-			Size:     mutate(baseAttributes.OffspringSize, 0.01, 0.1, 0.9),
+			Size:     mutate(baseAttributes.OffspringSize, 0.01, 0.01, 0.2),
 		},
 		Attributes: &Attributes{
 			Family:         baseAttributes.Family,
@@ -65,8 +68,9 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 			Defense:        mutate(baseAttributes.Defense, 5, 0, math.MaxFloat64),
 			Agility:        mutate(baseAttributes.Agility, 5, 0, math.MaxFloat64),
 			Reproductivity: mutate(baseAttributes.Reproductivity, 0.01, 0.1, 0.9),
-			// coordniate based
+			GrowthRate:		mutate(baseAttributes.Offense, 0.01, 0.01, math.MaxFloat64),
 			OffspringSize: mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
+			// coordniate based
 			Speed:         mutate(baseAttributes.Speed, 0.01, 0, 1.0),
 			Perception:    mutate(baseAttributes.Perception, 0.01, 0, 1.0),
 			Range:         mutate(baseAttributes.Range, 0.01, 0, 1.0),
@@ -80,6 +84,7 @@ func (o *Organism) Update(update *Update) {
 	o.State.Position = update.State.Position
 	o.State.Rotation = update.State.Rotation
 	o.State.Energy = update.State.Energy
+	o.State.Maturity = update.State.Maturity
 }
 
 func (o *Organism) Spawn() *Organism {

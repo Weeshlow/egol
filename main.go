@@ -87,7 +87,7 @@ func initializeSim() {
 			Agility:        rand.Float64() * 100,
 			Reproductivity: math.Min(0.1, math.Max(0.9, rand.Float64())),
 			// coordniate based
-			OffspringSize: 0.025 + (rand.Float64() * 0.05),
+			OffspringSize: 0.01 + (rand.Float64() * 0.02),
 			Speed:         0.01 + (rand.Float64() * 0.1),
 			Range:         0.01 + (rand.Float64() * 0.05),
 			Perception:    0.1 + (rand.Float64() * 0.1),
@@ -182,29 +182,6 @@ func loop() {
 		// apply updates to the state before next iteration
 		for key, update := range updates {
 			if organisms[key] == nil {
-				derp := &sim.Organism{
-					ID:         update.ID,
-					State:      update.State,
-					Attributes: update.Attributes,
-				}
-				fmt.Printf("%v\n", derp.ID)
-				fmt.Printf("%v\n", derp.State.Type)
-				fmt.Printf("%v\n", derp.State.Size)
-				fmt.Printf("%v\n", derp.State.Position)
-				fmt.Printf("%v\n", derp.State.Rotation)
-				fmt.Printf("%v\n", derp.State.Energy)
-				if (derp.Attributes != nil) {
-					fmt.Printf("%v\n", derp.Attributes.Family)
-					fmt.Printf("%v\n", derp.Attributes.Family)
-					fmt.Printf("%v\n", derp.Attributes.Offense)
-					fmt.Printf("%v\n", derp.Attributes.Defense)
-					fmt.Printf("%v\n", derp.Attributes.Agility)
-					fmt.Printf("%v\n", derp.Attributes.Reproductivity)
-					fmt.Printf("%v\n", derp.Attributes.OffspringSize)
-					fmt.Printf("%v\n", derp.Attributes.Speed)
-					fmt.Printf("%v\n", derp.Attributes.Perception)
-					fmt.Printf("%v\n", derp.Attributes.Range)
-				}
 				organisms[key] = &sim.Organism{
 					ID:         update.ID,
 					State:      update.State,
