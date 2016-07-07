@@ -77,7 +77,7 @@ func initializeSim() {
 	organismCount := 4
 	families := make([]*sim.Attributes, familyCount)
 	organisms = make(map[string]*sim.Organism)
-
+
 	for i := 0; i < familyCount; i++ {
 		families[i] = &sim.Attributes{
 			Family:         uint32(i),
