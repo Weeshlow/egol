@@ -14,6 +14,9 @@ func ApplyAI(update *Update, updates map[string]*Update, organism *Organism, per
 	case "reproducing":
 		ReproduceAI(update, updates, organism, perception)
 		break
+	case "attack":
+		AttackAI(update, updates, organism, perception)
+		break
 	case "dead":
 		DeadAI(update, updates, organism, perception)
 		break

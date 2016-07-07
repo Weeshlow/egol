@@ -1,34 +1,52 @@
 package sim
 
 import (
-	"math/rand"
+	"github.com/go-gl/mathgl/mgl32"
 )
 
-func offenseVsDefense(attacker *Organism, defender *Organism) bool {
-	offense := attacker.Attributes.Offense + attacker.Attributes.Agility
-	defense := defender.Attributes.Defense + defender.Attributes.Agility
-	prob := 0.0
-	if offense > defense {
-		prob = offense / defense
-	} else {
-		prob = defense / offense
+func HighestPriorityTarget(organism *Organism, perception *PerceptionResults) *mgl32.Vec3 {
+	var targetPosition *mgl32.Vec3
+	if len(perception.Organisms) > 0 {
+		// organisms in sight
+		bestScore := 0.0
+		for _, other := range perception.Organisms {
+			if other.Organism.Attributes.Family == organism.Attributes.Family {
+				continue
+			}
+			score := 0.0
+			score += 1 - other.Distance
+			if score > bestScore {
+				targetPosition = &other.Organism.State.Position
+				bestScore = score
+			}
+		}
+		return targetPosition
+	} else if len(perception.Positions) > 0 {
+		// positions in sight
+		bestScore := 0.0
+		for _, other := range perception.Positions {
+			score := 0.0
+			score += 1 - other.Distance
+			if score > bestScore {
+				targetPosition = &other.Position
+				bestScore = score
+			}
+		}
 	}
-	return prob > rand.Float64()
+	return targetPosition
 }
 
-// Attack returns true if an organism successfully attacks another
-func Attack(attacker *Organism, defender *Organism) bool {
-	diff := defender.State.Position.Sub(attacker.State.Position)
-	dist := float64(diff.Len())
-	if dist-defender.State.Size > attacker.State.Size+attacker.Attributes.Range {
-		// out of range
-		return false
+// ReproduceAI processes the organism for the given state
+func AttackAI(update *Update, updates map[string]*Update, organism *Organism, perception *PerceptionResults) {
+	// get highest priority target
+	target := HighestPriorityTarget(organism, perception)
+	if target != nil {
+		dist := float64(organism.State.Position.Sub(*target).Len())
+		if dist <= organism.Attributes.Range {
+			update.State.Position = *target
+			return
+		}
 	}
-	// return success or failure
-	return offenseVsDefense(attacker, defender)
-}
-
-// Consume returns the amount consumed.
-func Consume(attacker *Organism, defender *Organism) float64 {
-	return rand.Float64() * 0.25
+	// return to idle state
+	update.State.Type = "alive"
 }

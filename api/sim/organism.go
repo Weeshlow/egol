@@ -47,6 +47,7 @@ func mutate(value, variance, min, max float64) float64 {
 	return math.Min(max, math.Max(min, value+mutation))
 }
 
+
 func NewOrganism(baseAttributes *Attributes) *Organism {
 	return &Organism{
 		ID: util.RandID(),
@@ -59,7 +60,7 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 			},
 			Maturity: 0.0,
 			Rotation: 0.0,
-			Energy:   0.8 + rand.Float64() * 0.2,
+			Energy:   0.8 + rand.Float64()*0.2,
 			Size:     mutate(baseAttributes.OffspringSize, 0.01, 0.01, 0.2),
 		},
 		Attributes: &Attributes{
@@ -68,12 +69,12 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 			Defense:        mutate(baseAttributes.Defense, 5, 0, math.MaxFloat64),
 			Agility:        mutate(baseAttributes.Agility, 5, 0, math.MaxFloat64),
 			Reproductivity: mutate(baseAttributes.Reproductivity, 0.01, 0.1, 0.9),
-			GrowthRate:		mutate(baseAttributes.Offense, 0.01, 0.01, math.MaxFloat64),
-			OffspringSize: mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
+			GrowthRate:     mutate(baseAttributes.Offense, 0.01, 0.01, math.MaxFloat64),
+			OffspringSize:  mutate(baseAttributes.OffspringSize, 0.01, 0, 1.0),
 			// coordniate based
-			Speed:         mutate(baseAttributes.Speed, 0.01, 0, 1.0),
-			Perception:    mutate(baseAttributes.Perception, 0.01, 0, 1.0),
-			Range:         mutate(baseAttributes.Range, 0.01, 0, 1.0),
+			Speed:      mutate(baseAttributes.Speed, 0.01, 0, 1.0),
+			Perception: mutate(baseAttributes.Perception, 0.01, 0, 1.0),
+			Range:      mutate(baseAttributes.Range, 0.01, 0, 1.0),
 		},
 	}
 }
@@ -85,6 +86,10 @@ func (o *Organism) Update(update *Update) {
 	o.State.Rotation = update.State.Rotation
 	o.State.Energy = update.State.Energy
 	o.State.Maturity = update.State.Maturity
+}
+
+func (o *Organism) Movement() float64 {
+	return o.Attributes.Speed * (2 - o.State.Maturity);
 }
 
 func (o *Organism) Spawn() *Organism {

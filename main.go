@@ -88,8 +88,8 @@ func initializeSim() {
 			Reproductivity: math.Min(0.1, math.Max(0.9, rand.Float64())),
 			// coordniate based
 			OffspringSize: 0.01 + (rand.Float64() * 0.02),
-			Speed:         0.01 + (rand.Float64() * 0.1),
-			Range:         0.01 + (rand.Float64() * 0.05),
+			Speed:         0.01 + (rand.Float64() * 0.05),
+			Range:         0.01 + (rand.Float64() * 0.03),
 			Perception:    0.1 + (rand.Float64() * 0.1),
 		}
 	}
@@ -128,7 +128,7 @@ func loop() {
 		}
 
 		// apoply constraints and determine AI input for each organism
-		updates := sim.Iterate(organisms)
+		updates := sim.Iterate(organisms, config.FrameMS)
 
 		// write out current state
 		err := store("state", iteration, organisms)

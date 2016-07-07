@@ -45,15 +45,14 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 		var targetOrganism *Organism
 		var targetPosition mgl32.Vec3
 
-		score := 0.0;
 		if len(perception.Organisms) > 0 {
 			// organisms in sight
-			bestScore := 0.0;
+			bestScore := 0.0
 			for _, other := range perception.Organisms {
 				if other.Organism.Attributes.Family == organism.Attributes.Family {
-					continue;
+					continue
 				}
-				score += 1
+				score := 0.0
 				score += 1 - other.Distance
 				if score > bestScore {
 					targetOrganism = other.Organism
@@ -61,12 +60,11 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 					bestScore = score
 				}
 			}
-
 		} else if len(perception.Positions) > 0 {
 			// positions in sight
-			bestScore := 0.0;
+			bestScore := 0.0
 			for _, other := range perception.Positions {
-				score += 1
+				score := 0.0
 				score += 1 - other.Distance
 				if score > bestScore {
 					targetPosition = other.Position
@@ -81,16 +79,16 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 		runAway := false
 		if targetOrganism != nil {
 			// Check if we should be running away
-			if targetOrganism.State.Energy - organism.State.Energy > 0.01 {
-				runAway = true;
+			if targetOrganism.State.Energy-organism.State.Energy > 0.01 {
+				runAway = true
 			}
 		}
 		position := organism.State.Position
 		diff := position.Sub(targetPosition)
 		dist := position.Len()
-		if (dist > 0.0) {
+		if dist > 0.0 {
 			dir := diff.Normalize()
-			speed := float32(organism.Attributes.Speed)
+			speed := float32(organism.Movement())
 			velocity := dir.Mul(speed)
 			if runAway {
 				// move away from
@@ -99,7 +97,7 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 				// Chase after
 				update.State.Position = organism.State.Position.Sub(velocity)
 			}
-			clampToBounds(&update.State.Position);
+			clampToBounds(&update.State.Position)
 		}
 	}
 }

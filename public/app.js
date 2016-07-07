@@ -8,7 +8,8 @@
 	var Listener = require('./scripts/Listener');
 	var Organism = require('./scripts/Organism');
 
-	var FRAME_MS = 1000;
+	var MAX_FRAMES = 16;
+	var frames = [];
 
 	var canvas;
 	var gl;
@@ -76,10 +77,19 @@
 		viewport.pop();
 	}
 
+	function frameLength() {
+		var sum = 0;
+		frames.forEach(function(frame) {
+			sum += frame;
+		});
+		return sum / (frames.length || 1);
+	}
+
 	function processFrame() {
+		var frameMS = frameLength();
 		var stamp = Date.now();
 		var delta = stamp - last;
-		var t = Math.min(1.0, delta / FRAME_MS);
+		var t = Math.min(1.0, delta / frameMS);
 		_.forIn(organisms, organism => {
 			// get update if it is available
 			var update = updates[organism.id];
@@ -116,6 +126,8 @@
 		_.forIn(orgs, org => {
 			organisms[org.id] = new Organism(org);
 		});
+		// update timestamp
+		last =  Date.now();
 	}
 
 	function handleUpdate(newUpdates) {
@@ -129,6 +141,12 @@
 		});
 		// store new updates to interpolate to
 		updates = newUpdates;
+		// add frame time
+		var stamp = Date.now();
+		frames.push(stamp - last);
+		if (frames.length > MAX_FRAMES) {
+			frames.shift();
+		}
 		// update timestamp
 		last = Date.now();
 	}

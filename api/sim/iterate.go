@@ -2,7 +2,7 @@ package sim
 
 // Iterate applies one iteration of AI and returns the change in state as
 // a map of changes.
-func Iterate(organisms map[string]*Organism) map[string]*Update {
+func Iterate(organisms map[string]*Organism, delta int64) map[string]*Update {
 	updates := make(map[string]*Update)
 	for _, organism := range organisms {
 		// create update
@@ -14,14 +14,18 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 				Size:     organism.State.Size,
 				Position: organism.State.Position,
 				Rotation: organism.State.Rotation,
+				Maturity: organism.State.Maturity,
 			},
 		}
 
 		// apply constraints
-		ApplyConstraints(update, organism)
+		ApplyConstraints(update, organism, delta)
 
 		// apply ai
 		ApplyAI(update, updates, organism, PerceptionTest(organism, organisms))
+
+		// handle events
+		//HandleEvents();
 
 		updates[organism.ID] = update
 
