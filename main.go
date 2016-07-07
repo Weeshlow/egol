@@ -224,26 +224,31 @@ func main() {
 
 	// debug states for 3 organisms
 
-	var aliveState = sim.State{
-		Type: "alive",
-	}
-
 	id := util.RandID()
 	organisms[id] = &sim.Organism{
 		ID:    id,
-		State: &aliveState,
+		State: &sim.State{
+			Type: "alive",
+		},
+		Attributes: &sim.Attributes{},
 	}
 
 	id = util.RandID()
 	organisms[id] = &sim.Organism{
 		ID:    id,
-		State: &aliveState,
+		State: &sim.State{
+			Type: "alive",
+		},
+		Attributes: &sim.Attributes{},
 	}
 
 	id = util.RandID()
 	organisms[id] = &sim.Organism{
 		ID:    id,
-		State: &aliveState,
+		State: &sim.State{
+			Type: "alive",
+		},
+		Attributes: &sim.Attributes{},
 	}
 
 	// get redis connection
