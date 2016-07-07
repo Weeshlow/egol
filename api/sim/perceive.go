@@ -5,9 +5,15 @@ import (
 )
 
 type PerceptionResults struct {
-	Organisms  []*Organism
-	Positions  []*mgl32.Vec3
-	Directions []*mgl32.Vec3
+	Organisms     []*Organism
+	Positions     []*mgl32.Vec3
+	Directions    []*mgl32.Vec3
+	DistancePairs []*DistancePair
+}
+
+type DistancePair struct {
+	Distance float64
+	Organism Organism
 }
 
 // PerceptionTest results from an organisms perception test
@@ -15,10 +21,16 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 	organisms := make([]*Organism, 0)
 	positions := make([]*mgl32.Vec3, 0)
 	directions := make([]*mgl32.Vec3, 0)
+	distPairs := make([]*DistancePair, 0)
+
 	for _, target := range targets {
 		diff := target.State.Position.Sub(organism.State.Position)
 		dist := float64(diff.Len())
 		dir := diff.Normalize()
+		distPairs = append(distPairs, &DistancePair{
+			Distance: dist,
+			Organism: *organism,
+		})
 		if dist <= organism.Attributes.Perception {
 			organisms = append(organisms, target)
 		} else if dist >= organism.Attributes.Perception*2 {
@@ -28,8 +40,9 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 		}
 	}
 	return &PerceptionResults{
-		Organisms:  organisms,
-		Positions:  positions,
-		Directions: directions,
+		Organisms:     organisms,
+		Positions:     positions,
+		Directions:    directions,
+		DistancePairs: distPairs,
 	}
 }
