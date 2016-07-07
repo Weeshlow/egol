@@ -3,6 +3,9 @@
     'use strict';
 
     var esper = require('esper');
+    var glm = require('gl-matrix');
+    var Attributes = require('./Attributes');
+    var State = require('./State');
 
 	function createCircleBuffer(numSegments) {
 		var COMPONENT_BYTE_SIZE = 4;
@@ -44,26 +47,37 @@
     class Organism {
         constructor(spec) {
             this.id = spec.id;
-            this.position = spec.position;
-            this.rotation = spec.rotation;
-            this.state = spec.state;
-            this.attributes = spec.attributes;
+            this.state = new State(spec.state);
+            this.attributes = new Attributes(spec.attributes);
             this.buffer = createCircleBuffer(24);
         }
         interpolate(update, t) {
-            // iterpolate between current state and update based on a t value from 0 to 1
-            console.log(update, t);
-
-            return new Organism();
+            return new Organism({
+                id: this.id,
+                state: this.state.interpolate(update, t),
+                attributes: this.attributes,
+                buffer: this.buffer
+            });
         }
-        apply(update) {
-            // apply an update to the organism
-            console.log(update);
+        update(update) {
+            this.state = new State(update.state);
+            if (update.attributes) {
+                this.positions = update.position;
+            }
+            if (update.attributes) {
+                this.rotation = update.rotation;
+            }
+            if (update.attributes) {
+                this.attributes = update.attributes;
+            }
         }
         draw() {
             this.buffer.bind();
             this.buffer.draw();
             this.buffer.unbind();
+        }
+        matrix() {
+            return this.state.matrix();
         }
     }
 

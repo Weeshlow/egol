@@ -11,6 +11,7 @@
 	var FIELD_OF_VIEW = 60 * (Math.PI / 180);
 	var MIN_Z = 0.1;
 	var MAX_Z = 1000;
+	var FRAME_MS = 2000;
 
 	var canvas;
 	var gl;
@@ -35,12 +36,11 @@
 		if (viewport) {
 			var size = getWindowSize();
 			viewport.resize(size.width , size.height);
-			projection = glm.mat4.perspective(
+			projection = glm.mat4.ortho(
 				projection,
-				FIELD_OF_VIEW,
-				size.width / size.height,
-				MIN_Z,
-				MAX_Z);
+				0, 1,
+				0, 1,
+				-1, 1);
 		}
 	}
 
@@ -50,17 +50,30 @@
 		if (update) {
 			organism = organism.interpolate(update, t);
 		}
-		//organism.draw();
+		viewport.push();
+		shader.push();
+
+		shader.setUniform('uProjectionMatrix', projection);
+		shader.setUniform('uViewMatrix', view);
+		var mat = organism.matrix();
+		// console.log(mat);
+		shader.setUniform('uModelMatrix', organism.matrix());
+
+		organism.draw();
+
+		shader.pop();
+		viewport.pop();
 	}
 
 	function processFrame() {
 		var stamp = Date.now();
 		var delta = stamp - last;
+		var t = Math.min(1.0, delta / FRAME_MS);
 		_.forIn(organisms, organism => {
 			// get update if it is available
 			var update = updates[organism.id];
 			// render the interpolated state
-			render(organism, update, delta);
+			render(organism, update, t);
 		});
 		requestAnimationFrame(processFrame);
 	}
@@ -74,12 +87,11 @@
 		// view matrix
 		view = glm.mat4.create(1);
 		// projection matrix
-		projection = glm.mat4.perspective(
+		projection = glm.mat4.ortho(
 			glm.mat4.create(),
-			FIELD_OF_VIEW,
-			size.width / size.height,
-			MIN_Z,
-			MAX_Z);
+			0, 1,
+			0, 1,
+			-1, 1);
 	}
 
 	function handleState(orgs) {
@@ -132,6 +144,7 @@
 						// initiaze rendering
 						initializeState();
 						// initiate draw loop
+						last = Date.now();
 						processFrame();
 					});
 			});
