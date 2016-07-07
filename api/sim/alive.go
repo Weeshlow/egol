@@ -25,9 +25,9 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 	} else {
 
 		var targetOrganism *Organism
-		var targetPosition *mgl32.Vec3
-		var targetDirection *mgl.Vec3
+		var targetPosition mgl32.Vec3
 
+		score := 0.0;
 		if len(perception.Organisms) > 0 {
 			// organisms in sight
 			bestScore := 0.0;
@@ -36,6 +36,7 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 				score += 1 - other.Distance
 				if score > bestScore {
 					targetOrganism = other.Organism
+					targetPosition = other.Organism.State.Position
 					bestScore = score
 				}
 			}
@@ -47,13 +48,13 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 				score += 1
 				score += 1 - other.Distance
 				if score > bestScore {
-					target = other.Organism.Position
+					targetPosition = other.Position
 					bestScore = score
 				}
 			}
 		} else if len(perception.Directions) > 0 {
 			// directions
-			target = perception.Directions[0]
+			targetPosition = perception.Directions[0]
 		}
 
 		runAway := false
@@ -63,7 +64,7 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 				runAway = true;
 			}
 		}
-		dir := organism.State.Position.Sub(targetOrganism.State.Position).Normalize()
+		dir := organism.State.Position.Sub(targetPosition).Normalize()
 		if runAway {
 			// move away from
 			update.State.Position = organism.State.Position.Sub(dir.Mul(float32(organism.Attributes.Speed)))
