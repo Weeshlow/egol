@@ -53,6 +53,7 @@
 		shader.setUniform('uProjectionMatrix', projection);
 		shader.setUniform('uViewMatrix', view);
 		shader.setUniform('uModelMatrix', organism.matrix());
+		shader.setUniform('uColor', organism.color());
 
 		organism.draw();
 
