@@ -77,7 +77,7 @@ func initializeSim() {
 	organismCount := 4
 	families := make([]*sim.Attributes, familyCount)
 	organisms = make(map[string]*sim.Organism)
-
+
 	for i := 0; i < familyCount; i++ {
 		families[i] = &sim.Attributes{
 			Family:         uint32(i),
@@ -105,11 +105,11 @@ func initializeSim() {
 			Attributes: &sim.Attributes{
 				Family:         family.Family,
 				Offense:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Defense:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Agility:        math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Range:          math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Reproductivity: math.Max(0, family.Offense+(rand.Float64()*10-5)),
-				Size:           math.Max(0, family.Offense+(rand.Float64()*2-1)),
+				Defense:        math.Max(0, family.Defense+(rand.Float64()*10-5)),
+				Agility:        math.Max(0, family.Agility+(rand.Float64()*10-5)),
+				Range:          math.Max(0, family.Range+(rand.Float64()*10-5)),
+				Reproductivity: math.Max(0, family.Reproductivity+(rand.Float64()*10-5)),
+				Size:           math.Max(0, family.Size+(rand.Float64()*2-1)),
 			},
 		}
 	}
