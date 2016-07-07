@@ -6,12 +6,6 @@ import (
 	"github.com/go-gl/mathgl/mgl32"
 )
 
-type PerceptionResults struct {
-	Organisms     []*OrganismPair
-	Positions     []*PositionPair
-	Directions    []*mgl32.Vec3
-}
-
 type OrganismPair struct {
 	Distance float64
 	Organism *Organism
@@ -22,11 +16,17 @@ type PositionPair struct {
 	Position mgl32.Vec3
 }
 
+type PerceptionResults struct {
+	Organisms     []*OrganismPair
+	Positions     []*PositionPair
+	Directions    []mgl32.Vec3
+}
+
 // PerceptionTest results from an organisms perception test
 func PerceptionTest(organism *Organism, targets map[string]*Organism) *PerceptionResults {
 	organisms := make([]*OrganismPair, 0)
 	positions := make([]*PositionPair, 0)
-	directions := make([]*mgl32.Vec3, 0)
+	directions := make([]mgl32.Vec3, 0)
 
 	for _, target := range targets {
 		if target.ID == organism.ID {
@@ -40,7 +40,7 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 		if dist <= organism.Attributes.Perception {
 			organisms = append(organisms, &OrganismPair{
 				Distance: dist,
-				Position: target,
+				Organism: target,
 			})
 		}
 		if dist <= organism.Attributes.Perception*2 {
@@ -49,11 +49,11 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 				Position: target.State.Position,
 			})
 		}
-		directions = append(directions, &dir)
+		directions = append(directions, dir)
 	}
 	return &PerceptionResults{
-		Organisms:     organisms,
-		Positions:     positions,
-		Directions:    directions,
+		Organisms:  organisms,
+		Positions:  positions,
+		Directions: directions,
 	}
 }
