@@ -34,13 +34,18 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 			Distance: dist,
 			Organism: *target,
 		})
+
 		if dist <= organism.Attributes.Perception {
 			organisms = append(organisms, target)
-		} else if dist >= organism.Attributes.Perception*2 {
+		} else {
+			organisms = append(organisms, nil)
+		}
+		if dist >= organism.Attributes.Perception*2 {
 			positions = append(positions, &target.State.Position)
 		} else {
-			directions = append(directions, &dir)
+			positions = append(positions, nil)
 		}
+		directions = append(directions, &dir)
 	}
 	return &PerceptionResults{
 		Organisms:     organisms,

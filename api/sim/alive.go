@@ -4,6 +4,7 @@ import (
 	"math/rand"
 
 	"github.com/go-gl/mathgl/mgl32"
+	log "github.com/unchartedsoftware/plog"
 )
 
 // RandomPosition returns a random vec3
@@ -26,21 +27,47 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 
 		if (len(perception.DistancePairs) > 0) {
 
-			closestPair := perception.DistancePairs[0]
+			// Determine target
+			bestScore := 0.0;
+			targetPair := perception.DistancePairs[0];
+			targetOrganism := perception.Organisms[0];
 
-			for _, pair := range perception.DistancePairs {
-				if organism.ID == pair.Organism.ID {
-					continue
+			log.Info("DistancePairs", perception.DistancePairs)
+			for i, pair := range perception.DistancePairs {
+				score := 1.0;
+
+				if perception.Organisms[i] != nil {
+					score += 1;
 				}
-				if pair.Distance < closestPair.Distance {
-					closestPair = pair
+				if (perception.Positions[i] != nil) {
+					score += 1;
+				}
+				score += 1 - targetPair.Distance
+
+				if score > bestScore {
+					targetPair = pair
+					targetOrganism = perception.Organisms[i]
+					bestScore = score
 				}
 			}
 
-			if closestPair != nil {
-				// move away from
-				dir := organism.State.Position.Sub(closestPair.Organism.State.Position).Normalize()
-				update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
+			if targetPair != nil {
+				runAway := false
+				if targetOrganism != nil {
+					// Check if we should be running away
+					if targetPair.Organism.State.Energy > organism.State.Energy {
+						runAway = true;
+					}
+				}
+				if runAway {
+					// move away from
+					dir := organism.State.Position.Sub(targetPair.Organism.State.Position).Normalize()
+					update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
+				} else {
+					// Chase after
+					dir := organism.State.Position.Add(targetPair.Organism.State.Position).Normalize()
+					update.State.Position = organism.State.Position.Add(dir.Mul(float32(organism.Attributes.Speed)))
+				}
 			}
 		}
 	}
