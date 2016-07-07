@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "author": "Kevin Birk <kbirk@uncharted.software>",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-preset-es2015": "6.9.0",
     "babelify": "7.3.0",
@@ -20,6 +19,7 @@
     "gulp-jshint": "1.11.2",
     "jsfmt": "0.5.2",
     "jshint-stylish": "2.1.0",
+    "lodash": "4.13.1",
     "run-sequence": "1.1.5",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",

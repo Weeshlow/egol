@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"net/http"
 	"runtime"
 	"syscall"
+	"encoding/json"
 	"time"
 
 	"github.com/go-gl/mathgl/mgl32"
@@ -83,9 +85,6 @@ func loop() {
 			break
 		}
 
-		log.Info("Iteration: ", iteration)
-		log.Info("organisms: ", organisms)
-
 		// apply constraints to each organism
 		sim.ApplyConstraints(organisms)
 
@@ -94,7 +93,7 @@ func loop() {
 
 		// write out current state
 		stateID := fmt.Sprintf("%s-%d-state", config.SimID, iteration)
-		stateBytes, err := util.MarshalState(organisms)
+		stateBytes, err := json.Marshal(organisms)
 		if err != nil {
 			log.Error(err)
 			continue
@@ -107,7 +106,7 @@ func loop() {
 
 		// write out delta
 		updateID := fmt.Sprintf("%s-%d-update", config.SimID, iteration)
-		updateBytes, err := util.MarshalUpdates(updates)
+		updateBytes, err := json.Marshal(updates)
 		if err != nil {
 			log.Error(err)
 			continue
@@ -117,6 +116,10 @@ func loop() {
 			log.Error(err)
 			continue
 		}
+
+		log.Info("Iteration: ", iteration)
+		log.Info("organisms: ", organisms)
+		log.Info("updates: ", updates)
 
 		for iter := range clients.Iter() {
 			client, ok := iter.Val.(*ws.Client)
@@ -221,30 +224,32 @@ func main() {
 
 	organisms = make([]*sim.Organism, 3)
 
-	// var deadState = sim.State{
-	// 	Type:      0,
-	// 	Timestamp: uint64(time.Now().UnixNano()),
-	// }
+	// debug states for 3 organisms
 
 	var aliveState = sim.State{
 		Type: "alive",
 	}
 
+	var defaultAttributes = sim.Attributes{}
+
 	organisms[0] = &sim.Organism{
-		ID:       0,
-		State:    &aliveState,
+		ID:    0,
+		State: &aliveState,
+		Attributes: &defaultAttributes,
 		Position: mgl32.Vec3{0.0, 1.0, 0.0},
 	}
 
 	organisms[1] = &sim.Organism{
-		ID:       0,
-		State:    &aliveState,
+		ID:    0,
+		State: &aliveState,
+		Attributes: &defaultAttributes,
 		Position: mgl32.Vec3{0.5, 1.5, 2.0},
 	}
 
 	organisms[2] = &sim.Organism{
-		ID:       0,
-		State:    &aliveState,
+		ID:    0,
+		State: &aliveState,
+		Attributes: &defaultAttributes,
 		Position: mgl32.Vec3{3.0, 3.0, 3.0},
 	}
 
