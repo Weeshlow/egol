@@ -8,6 +8,10 @@
 	var State = require('./State');
 	var buffer = null;
 
+	function rgbToFloat(v) {
+		return v / 255;
+	}
+
 	function createCircleBuffer(numSegments) {
 		if (!buffer) {
 			var COMPONENT_BYTE_SIZE = 4;
@@ -78,20 +82,19 @@
 			this.buffer.unbind();
 		}
 		color() {
-			if (this.state.type === 'dead') {
-				return [0.1, 0.1, 0.1, 1.0];
-			}
 			switch (this.attributes.family) {
 				case 0:
-					return [0.9, 0.6, 0.4, 1.0];
+					return [92, 172, 196, 255].map(rgbToFloat);
 				case 1:
-					return [0.2, 0.9, 0.2, 1.0];
+					return [140, 209, 157, 255].map(rgbToFloat);
 				case 2:
-					return [0.2, 0.2, 0.9, 1.0];
+					return [206, 232, 121, 255].map(rgbToFloat);
 				case 3:
-					return [0.9, 0.2, 0.2, 1.0];
+					return [252, 182, 83, 255].map(rgbToFloat);
 				case 4:
-					return [0.9, 0.2, 0.9, 1.0];
+					return [255, 82,84, 255].map(rgbToFloat);
+				default:
+					return [0.1, 0.1, 0.1, 1.0];
 			}
 		}
 		matrix() {

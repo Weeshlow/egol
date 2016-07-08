@@ -142,9 +142,15 @@
 		// apply last updates to state
 		_.forIn(updates, (update, id) => {
 			if (!organisms[id]) {
-				organisms[id] = new Organism(update);
+				if (update.state.type !== 'dead') {
+					organisms[id] = new Organism(update);
+				}
 			} else {
 				organisms[id].update(update);
+				// remove dead organisms
+				if (organisms[id].state.type === 'dead') {
+					delete organisms[id];
+				}
 			}
 		});
 		// store new updates to interpolate to
