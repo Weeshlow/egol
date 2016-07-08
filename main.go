@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -13,6 +14,7 @@ import (
 	log "github.com/unchartedsoftware/plog"
 	"github.com/zenazn/goji/graceful"
 	"github.com/zenazn/goji/web"
+	"github.com/go-gl/mathgl/mgl32"
 
 	"github.com/unchartedsoftware/egol/api/conf"
 	"github.com/unchartedsoftware/egol/api/middleware"
@@ -34,6 +36,7 @@ var (
 	redisConn *redis.Connection
 	clients   cmap.ConcurrentMap
 	config    *conf.Conf
+	families  []*sim.Attributes
 )
 
 func handleMessage(client *ws.Client) ws.RequestHandler {
@@ -74,7 +77,7 @@ func shouldExit() bool {
 }
 
 func initializeSim() {
-	families := make([]*sim.Attributes, numFamilyTypes)
+	families = make([]*sim.Attributes, numFamilyTypes)
 	organisms = make(map[string]*sim.Organism)
 	for i := 0; i < numFamilyTypes; i++ {
 		families[i] = &sim.Attributes{
@@ -82,7 +85,7 @@ func initializeSim() {
 			Offense:        0.01 + (rand.Float64() * 0.02),
 			Defense:        0.01 + (rand.Float64() * 0.02),
 			Agility:        0.01 + (rand.Float64() * 0.02),
-			Reproductivity: 0.01 + (rand.Float64() * 0.02),
+			Reproductivity: math.Min(0.1, math.Max(0.9, rand.Float64())),
 			// coordniate based
 			Speed:      0.01 + (rand.Float64() * 0.05),
 			Range:      0.01 + (rand.Float64() * 0.03),
@@ -125,6 +128,42 @@ func loop() {
 		// apoply constraints and determine AI input for each organism
 		updates := sim.Iterate(organisms)
 
+		//Every 20 iterations spawn new organisms around edge
+		if iteration % 30 == 0 {
+			count := rand.Intn(organismCount / 2)
+
+			for i := 0; i < count; i++ {
+				family := families[i%numFamilyTypes]
+				organism := sim.NewOrganism(family)
+
+				x := rand.Float64();
+				y := rand.Float64();
+				if (rand.Float64() < 0.5) {
+					if x < 0.5 {
+						x = 0 + - rand.Float64()*0.02;
+					} else {
+						x = 1 - rand.Float64()*0.02;
+					}
+				} else {
+					if y < 0.5 {
+						y = 0 + - rand.Float64()*0.02;
+					} else {
+						y = 1 - rand.Float64()*0.02;
+					}	
+				}
+				organism.State.Position = mgl32.Vec3{
+					float32(x),
+					float32(y),
+					0.0,
+				}
+				updates[organism.ID] = &sim.Update{
+					ID:         organism.ID,
+					State:      organism.State,
+					Attributes: organism.Attributes,
+				}
+			}
+		}
+
 		// apply updates to the state before next iteration
 		for key, update := range updates {
 			if organisms[key] == nil {
@@ -142,6 +181,7 @@ func loop() {
 		err := store("state", iteration, organisms)
 		if err != nil {
 			log.Error(err)
+			time.Sleep(time.Duration(1000) * time.Millisecond)
 			continue
 		}
 
@@ -149,6 +189,7 @@ func loop() {
 		err = store("update", iteration, updates)
 		if err != nil {
 			log.Error(err)
+			time.Sleep(time.Duration(1000) * time.Millisecond)
 			continue
 		}
 
