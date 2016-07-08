@@ -47,17 +47,12 @@ func mutate(value, variance, min, max float64) float64 {
 	return math.Min(max, math.Max(min, value+mutation))
 }
 
-
 func NewOrganism(baseAttributes *Attributes) *Organism {
 	return &Organism{
 		ID: util.RandID(),
 		State: &State{
-			Type: "alive",
-			Position: mgl32.Vec3{
-				rand.Float32(),
-				rand.Float32(),
-				rand.Float32(),
-			},
+			Type:     "alive",
+			Position: util.RandomPosition(),
 			Maturity: 0.0,
 			Rotation: 0.0,
 			Energy:   0.8 + rand.Float64()*0.2,
@@ -89,12 +84,13 @@ func (o *Organism) Update(update *Update) {
 }
 
 func (o *Organism) Movement() float64 {
-	return o.Attributes.Speed * (2 - o.State.Maturity);
+	return o.Attributes.Speed * (2 - o.State.Maturity)
 }
 
 func (o *Organism) Spawn() *Organism {
 	offspring := NewOrganism(o.Attributes)
-	offspring.State.Position = o.State.Position
+	noise := util.RandomDirection().Mul(float32(rand.Float64() * o.State.Size))
+	offspring.State.Position = o.State.Position.Add(noise)
 	return offspring
 }
 

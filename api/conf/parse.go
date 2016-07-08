@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	defaultFrameMs       = 1000
+	defaultFrameMs       = 200
 	defaultOrganismCount = 1000
 	defaultPort          = "8080"
 	defaultRedisHost     = "localhost"

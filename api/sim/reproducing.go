@@ -34,8 +34,7 @@ func reproduce(update *Update, updates map[string]*Update, organism *Organism) {
 // ReproduceAI processes the organism for the given state
 func ReproduceAI(update *Update, updates map[string]*Update, organism *Organism, perception *PerceptionResults) {
 	if organism.State.Energy > 0.5 &&
-		len(perception.Organisms) == 0 &&
-		len(perception.Positions) == 0 {
+		len(perception.Organisms) == 0 {
 		// keep reproducing
 		reproduce(update, updates, organism)
 		update.State.Type = "reproducing"

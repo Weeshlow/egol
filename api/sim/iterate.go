@@ -4,6 +4,8 @@ package sim
 // a map of changes.
 func Iterate(organisms map[string]*Organism, delta int64) map[string]*Update {
 	updates := make(map[string]*Update)
+
+	// ensure an update is available for all orgs
 	for _, organism := range organisms {
 		// create update
 		update := &Update{
@@ -17,6 +19,13 @@ func Iterate(organisms map[string]*Organism, delta int64) map[string]*Update {
 				Maturity: organism.State.Maturity,
 			},
 		}
+		updates[organism.ID] = update
+	}
+
+	// process all upates
+	for _, organism := range organisms {
+
+		update, _ := updates[organism.ID]
 
 		// apply constraints
 		ApplyConstraints(update, organism, delta)

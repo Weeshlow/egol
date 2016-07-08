@@ -60,18 +60,17 @@
 		shader.setUniform('uColor', organism.color());
 		organism.draw();
 
-		// draw perception range
-		shader.setUniform('uModelMatrix', organism.perception(1));
-		shader.setUniform('uColor', [0.5, 0.5, 0.5, 0.5]);
-		organism.draw();
-		shader.setUniform('uModelMatrix', organism.perception(2));
-		shader.setUniform('uColor', [0.5, 0.5, 0.5, 0.25]);
-		organism.draw();
+		if (organism.state.type !== 'dead') {
+			// draw perception range
+			shader.setUniform('uModelMatrix', organism.perception(1));
+			shader.setUniform('uColor', [0.5, 0.5, 0.5, 0.05]);
+			organism.draw();
 
-		// draw attack ranges
-		shader.setUniform('uModelMatrix', organism.range());
-		shader.setUniform('uColor', [1.0, 0.0, 0.0, 0.25]);
-		organism.draw();
+			// draw attack ranges
+			shader.setUniform('uModelMatrix', organism.range());
+			shader.setUniform('uColor', [0.5, 0.5, 0.5, 0.05]);
+			organism.draw();
+		}
 
 		shader.pop();
 		viewport.pop();

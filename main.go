@@ -74,23 +74,22 @@ func shouldExit() bool {
 
 func initializeSim() {
 
-	familyCount := 4
-	organismCount := 4
+	familyCount := 5
+	organismCount := 20
 	families := make([]*sim.Attributes, familyCount)
 	organisms = make(map[string]*sim.Organism)
 
 	for i := 0; i < familyCount; i++ {
 		families[i] = &sim.Attributes{
 			Family:         uint32(i),
-			Offense:        rand.Float64() * 100,
-			Defense:        rand.Float64() * 100,
-			Agility:        rand.Float64() * 100,
+			Offense:        0.01 + (rand.Float64() * 0.02),
+			Defense:        0.01 + (rand.Float64() * 0.02),
+			Agility:        0.01 + (rand.Float64() * 0.02),
 			Reproductivity: math.Min(0.1, math.Max(0.9, rand.Float64())),
 			// coordniate based
-			OffspringSize: 0.01 + (rand.Float64() * 0.02),
-			Speed:         0.01 + (rand.Float64() * 0.05),
-			Range:         0.01 + (rand.Float64() * 0.03),
-			Perception:    0.1 + (rand.Float64() * 0.1),
+			Speed:      0.01 + (rand.Float64() * 0.05),
+			Range:      0.01 + (rand.Float64() * 0.03),
+			Perception: 0.1 + (rand.Float64() * 0.1),
 		}
 	}
 
@@ -129,6 +128,19 @@ func loop() {
 
 		// apoply constraints and determine AI input for each organism
 		updates := sim.Iterate(organisms, config.FrameMS)
+
+		// apply updates to the state before next iteration
+		for key, update := range updates {
+			if organisms[key] == nil {
+				organisms[key] = &sim.Organism{
+					ID:         update.ID,
+					State:      update.State,
+					Attributes: update.Attributes,
+				}
+			} else {
+				organisms[key].Update(update)
+			}
+		}
 
 		// write out current state
 		err := store("state", iteration, organisms)
@@ -176,19 +188,6 @@ func loop() {
 					log.Error(err)
 				}
 				client.New = false
-			}
-		}
-
-		// apply updates to the state before next iteration
-		for key, update := range updates {
-			if organisms[key] == nil {
-				organisms[key] = &sim.Organism{
-					ID:         update.ID,
-					State:      update.State,
-					Attributes: update.Attributes,
-				}
-			} else {
-				organisms[key].Update(update)
 			}
 		}
 
