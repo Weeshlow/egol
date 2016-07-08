@@ -31,40 +31,39 @@ func clampToBounds(vec *mgl32.Vec3) {
 func AliveAI(update *Update, updates map[string]*Update, organism *Organism, perception *PerceptionResults) {
 	if organism.State.Energy > 0.5 &&
 		organism.State.Maturity > 0.5 &&
-		len(perception.Organisms) == 0 {
+		len(perception.Threats) == 0 {
 		// attempt to reproduce
 		update.State.Type = "reproducing"
 	} else {
 
-		if len(perception.Organisms) > 0 {
+		if len(perception.Threats) > 0 {
 			// organisms in sight
-			var targetPosition *mgl32.Vec3
+			var closestThreat *Organism
 			shortestDist := math.MaxFloat64
-			for _, other := range perception.Organisms {
-				if other.Organism.Attributes.Family == organism.Attributes.Family {
-					continue
-				}
-				if other.Distance-other.Organism.State.Size-organism.State.Size < organism.Attributes.Range {
+
+			for _, other := range perception.Threats {
+				if organism.InRange(other.Distance, other.Organism) {
 					// in attack range, lets attack
 					update.State.Type = "attack"
 					return
 				}
 				if other.Distance < shortestDist {
 					//targetOrganism = other.Organism
-					targetPosition = &other.Organism.State.Position
+					closestThreat = other.Organism
 					shortestDist = other.Distance
 				}
 			}
 
-			if targetPosition != nil {
+			if closestThreat != nil {
+				target := closestThreat.State.Position
 				position := organism.State.Position
-				diff := targetPosition.Sub(position)
+				diff := target.Sub(position)
 				dist := diff.Len()
 				if dist > 0.0 {
 					dir := diff.Normalize()
-					speed := float32(organism.Movement())
+					speed := float32(organism.Speed())
 					velocity := dir.Mul(speed)
-					noise := util.RandomDirection().Mul(0.01)
+					noise := util.RandomDirection().Mul(0.005)
 
 					score := float64(0.0)
 					score += organism.State.Maturity
@@ -83,9 +82,26 @@ func AliveAI(update *Update, updates map[string]*Update, organism *Organism, per
 			}
 		}
 
+		if len(perception.Family) > 0 {
+			position := organism.State.Position
+			fam := perception.Family[0].Organism.State.Position
+			diff := fam.Sub(position)
+			dist := diff.Len()
+			if dist > 0.0 {
+				dir := diff.Normalize()
+				speed := float32(organism.Speed())
+				velocity := dir.Mul(speed)
+				noise := util.RandomDirection().Mul(0.005)
+				// move away from family, to spread out
+				update.State.Position = position.Sub(velocity).Add(noise)
+			}
+			clampToBounds(&update.State.Position)
+			return
+		}
+
 		// wander aimlessly
 		position := organism.State.Position
-		speed := float32(organism.Movement())
+		speed := float32(organism.Speed())
 		noise := util.RandomDirection().Mul(speed)
 		update.State.Position = position.Add(noise)
 		clampToBounds(&update.State.Position)

@@ -9,9 +9,8 @@
             if (!spec) {
                 throw 'No state argument';
             }
+            // type
             this.type = spec.type;
-            // physical
-            this.size = spec.size;
             // energy
             this.energy = (spec.energy !== undefined) ? spec.energy : 1.0;
             // position
@@ -25,7 +24,7 @@
         interpolate(update, t) {
             var state = update.state;
 
-            // iterpolate between current state and update based on a t value from 0 to 1
+            // interpolate between current state and update based on a t value from 0 to 1
             // get distance vector
             let diff = glm.vec3.sub(glm.vec3.create(), state.position, this.position);
             // scale by t value
@@ -33,18 +32,14 @@
             // get update position
             let position = glm.vec3.add(glm.vec3.create(), this.position, diff);
 
-            // iterpolate size
-            let size = this.size * (1-t) + state.size * t;
+            // interpolate maturity
+            let maturity = this.maturity * (1-t) + state.maturity * t;
 
-            // iterpolate maturity
-            let maturity = this.size * (1-t) + state.maturity * t;
-
-            // iterpolate energy
-            let energy = this.size * (1-t) + state.energy * t;
+            // interpolate energy
+            let energy = this.energy * (1-t) + state.energy * t;
 
             return new State({
                 type: state.type,
-                size: size,
                 energy: energy,
                 position: position,
                 maturity: maturity
@@ -52,7 +47,6 @@
         }
         update(update) {
             this.type = update.type;
-            this.size = update.size;
             this.energy = update.energy;
             this.position = update.position;
             this.maturity = update.maturity;

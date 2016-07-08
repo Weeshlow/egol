@@ -13,7 +13,6 @@ func Iterate(organisms map[string]*Organism, delta int64) map[string]*Update {
 			State: &State{
 				Type:     "alive",
 				Energy:   organism.State.Energy,
-				Size:     organism.State.Size,
 				Position: organism.State.Position,
 				Maturity: organism.State.Maturity,
 			},
@@ -23,20 +22,14 @@ func Iterate(organisms map[string]*Organism, delta int64) map[string]*Update {
 
 	// process all upates
 	for _, organism := range organisms {
-
+		// get update
 		update, _ := updates[organism.ID]
-
-		// apply constraints
-		ApplyConstraints(update, organism, delta)
 
 		// apply ai
 		ApplyAI(update, updates, organism, PerceptionTest(organism, organisms))
 
-		// handle events
-		//HandleEvents();
-
-		updates[organism.ID] = update
-
+		// apply constraints
+		ApplyConstraints(update, delta)
 	}
 
 	return updates

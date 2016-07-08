@@ -25,6 +25,8 @@ import (
 
 const (
 	websocketRoute = "/connect"
+	numFamilyTypes = 5
+	organismCount  = 50
 )
 
 var (
@@ -73,13 +75,9 @@ func shouldExit() bool {
 }
 
 func initializeSim() {
-
-	familyCount := 5
-	organismCount := 20
-	families := make([]*sim.Attributes, familyCount)
+	families := make([]*sim.Attributes, numFamilyTypes)
 	organisms = make(map[string]*sim.Organism)
-
-	for i := 0; i < familyCount; i++ {
+	for i := 0; i < numFamilyTypes; i++ {
 		families[i] = &sim.Attributes{
 			Family:         uint32(i),
 			Offense:        0.01 + (rand.Float64() * 0.02),
@@ -92,10 +90,9 @@ func initializeSim() {
 			Perception: 0.1 + (rand.Float64() * 0.1),
 		}
 	}
-
 	// Initialize organisms. Add random variation from family
 	for i := 0; i < organismCount; i++ {
-		family := families[i%familyCount]
+		family := families[i%numFamilyTypes]
 		organism := sim.NewOrganism(family)
 		organisms[organism.ID] = organism
 	}

@@ -12,7 +12,7 @@
         if (!buffer) {
             var COMPONENT_BYTE_SIZE = 4;
             var theta = (2 * Math.PI) / numSegments;
-            var radius = 0.5;
+            var radius = 1.0;
             // precalculate sine and cosine
             var c = Math.cos(theta);
             var s = Math.sin(theta);
@@ -66,6 +66,9 @@
                 buffer: this.buffer
             });
         }
+        size() {
+            return 0.005 + (this.state.maturity * this.state.energy * 0.01);
+        }
         update(update) {
             this.state.update(update.state);
         }
@@ -95,9 +98,9 @@
             var translation = this.state.position;
             var rotation = glm.quat.identity(glm.quat.create());
             var scale = glm.vec3.fromValues(
-                this.state.size,
-                this.state.size,
-                this.state.size);
+                this.size(),
+                this.size(),
+                this.size());
             return glm.mat4.fromRotationTranslationScale(
                 glm.mat4.create(),
                 // rotation
@@ -107,13 +110,13 @@
                 // scale
                 scale);
         }
-        perception(weight) {
+        perception() {
             var translation = this.state.position;
             var rotation = glm.quat.identity(glm.quat.create());
             var scale = glm.vec3.fromValues(
-                this.state.size + this.attributes.perception * weight,
-                this.state.size + this.attributes.perception * weight,
-                this.state.size + this.attributes.perception * weight);
+                this.size() + this.attributes.perception,
+                this.size() + this.attributes.perception,
+                this.size() + this.attributes.perception);
             return glm.mat4.fromRotationTranslationScale(
                 glm.mat4.create(),
                 // rotation
@@ -127,9 +130,9 @@
             var translation = this.state.position;
             var rotation = glm.quat.identity(glm.quat.create());
             var scale = glm.vec3.fromValues(
-                this.state.size + this.attributes.range,
-                this.state.size + this.attributes.range,
-                this.state.size + this.attributes.range);
+                this.size() + this.attributes.range,
+                this.size() + this.attributes.range,
+                this.size() + this.attributes.range);
             return glm.mat4.fromRotationTranslationScale(
                 glm.mat4.create(),
                 // rotation
