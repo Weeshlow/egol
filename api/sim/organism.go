@@ -23,12 +23,10 @@ type Attributes struct {
 	Family         uint32  `json:"family"`
 	Offense        float64 `json:"offense"`
 	Defense        float64 `json:"defense"`
-	Agility        float64 `json:"agility"`
 	Reproductivity float64 `json:"reproductivity"`
-	// coordinate based
-	Range      float64 `json:"range"`
-	Perception float64 `json:"perception"`
-	Speed      float64 `json:"speed"`
+	Range          float64 `json:"range"`
+	Perception     float64 `json:"perception"`
+	Speed          float64 `json:"speed"`
 }
 
 // Organism represents a single autonomous organism.
@@ -56,11 +54,10 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 			Family:         baseAttributes.Family,
 			Offense:        mutate(baseAttributes.Offense, 0.01, 0, 1.0),
 			Defense:        mutate(baseAttributes.Defense, 0.01, 0, 1.0),
-			Reproductivity: mutate(baseAttributes.Reproductivity, 0.01, 0.1, 0.9),
-			// coordniate based
-			Perception: mutate(baseAttributes.Perception, 0.01, 0, 1.0),
-			Range:      mutate(baseAttributes.Range, 0.01, 0, 1.0),
-			Speed:      mutate(baseAttributes.Speed, 0.01, 0, 1.0),
+			Reproductivity: mutate(baseAttributes.Reproductivity, 0.01, 0.1, 0.5),
+			Perception:     mutate(baseAttributes.Perception, 0.01, 0, 1.0),
+			Range:          mutate(baseAttributes.Range, 0.01, 0, 1.0),
+			Speed:          mutate(baseAttributes.Speed, 0.01, 0, 1.0),
 		},
 	}
 }

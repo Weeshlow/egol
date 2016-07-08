@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -84,12 +83,10 @@ func initializeSim() {
 			Family:         uint32(i),
 			Offense:        0.01 + (rand.Float64() * 0.02),
 			Defense:        0.01 + (rand.Float64() * 0.02),
-			Agility:        0.01 + (rand.Float64() * 0.02),
-			Reproductivity: math.Min(0.1, math.Max(0.9, rand.Float64())),
-			// coordniate based
-			Speed:      0.01 + (rand.Float64() * 0.05),
-			Range:      0.01 + (rand.Float64() * 0.03),
-			Perception: 0.1 + (rand.Float64() * 0.1),
+			Reproductivity: 0.01 + (rand.Float64() * 0.02),
+			Speed:          0.02 + (rand.Float64() * 0.04),
+			Range:          0.01 + (rand.Float64() * 0.02),
+			Perception:     0.1 + (rand.Float64() * 0.1),
 		}
 	}
 	// Initialize organisms. Add random variation from family

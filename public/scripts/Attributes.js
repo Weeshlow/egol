@@ -11,7 +11,6 @@
 			this.offense = spec.offense;
 			this.defense = spec.defense;
 			this.reproductivity = spec.reproductivity;
-			// coordniate based
 			this.range = spec.range;
 			this.perception = spec.perception;
 			this.speed = spec.speed;
