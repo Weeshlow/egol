@@ -17,6 +17,7 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 				Maturity: organism.State.Maturity,
 			},
 		}
+		// add to map
 		updates[organism.ID] = update
 	}
 
@@ -24,10 +25,14 @@ func Iterate(organisms map[string]*Organism) map[string]*Update {
 	for _, organism := range organisms {
 		// get update
 		update, _ := updates[organism.ID]
-
 		// apply ai
 		ApplyAI(update, updates, organism, PerceptionTest(organism, organisms))
+	}
 
+	// apply all contraints
+	for _, organism := range organisms {
+		// get update
+		update, _ := updates[organism.ID]
 		// apply constraints
 		ApplyConstraints(update)
 	}

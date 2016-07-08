@@ -7,8 +7,8 @@ import (
 // Update reprsents a single iterations update.
 type Update struct {
 	ID         string      `json:"id"`
-	State      *State      `json:"state"`
-	Attributes *Attributes `json:"attributes"`
+	State      *State      `json:"state,omitempty"`
+	Attributes *Attributes `json:"attributes,omitempty"`
 }
 
 // Marshal returns the byte representation of an update.

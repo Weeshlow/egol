@@ -1,21 +1,23 @@
 package sim
 
+// OrganismPair represents the preceived organism and the dsitance to it.
 type OrganismPair struct {
 	Distance float64
 	Organism *Organism
 }
 
+// PerceptionResults represents the results from a perception check.
 type PerceptionResults struct {
 	Threats []*OrganismPair
 	Family  []*OrganismPair
 }
 
-// PerceptionTest results from an organisms perception test
-func PerceptionTest(organism *Organism, targets map[string]*Organism) *PerceptionResults {
+// PerceptionTest returns perception results for a given organism.
+func PerceptionTest(organism *Organism, organisms map[string]*Organism) *PerceptionResults {
 	threats := make([]*OrganismPair, 0)
 	family := make([]*OrganismPair, 0)
-	for _, target := range targets {
-		if target.ID == organism.ID || target.State.Type == "dead" {
+	for _, target := range organisms {
+		if target.ID == organism.ID {
 			continue
 		}
 		dist, success := organism.Perceive(target)
@@ -31,7 +33,6 @@ func PerceptionTest(organism *Organism, targets map[string]*Organism) *Perceptio
 					Organism: target,
 				})
 			}
-
 		}
 	}
 	return &PerceptionResults{

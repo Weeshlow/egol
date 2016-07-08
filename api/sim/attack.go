@@ -5,14 +5,11 @@ import (
 	"math/rand"
 )
 
-// ReproduceAI processes the organism for the given state
+// AttackAI processes the organism for the given state.
 func AttackAI(update *Update, updates map[string]*Update, organism *Organism, perception *PerceptionResults) {
 	if len(perception.Threats) > 0 {
 		// organisms in sight
 		for _, other := range perception.Threats {
-			if other.Organism.Attributes.Family == organism.Attributes.Family {
-				continue
-			}
 			if organism.InRange(other.Distance, other.Organism) {
 				// in attack range, lets attack
 				dmg := organism.Attack() - other.Organism.Defense() + (0.2 * rand.Float64())

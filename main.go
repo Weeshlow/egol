@@ -27,6 +27,7 @@ const (
 	numFamilyTypes = 5
 	organismCount  = 50
 	spawnRate      = 50
+	spawnCount     = 50
 )
 
 var (
@@ -83,8 +84,8 @@ func initializeSim() {
 			Family:         uint32(i),
 			Offense:        0.01 + (rand.Float64() * 0.02),
 			Defense:        0.01 + (rand.Float64() * 0.02),
+			Agility:        0.02 + (rand.Float64() * 0.04),
 			Reproductivity: 0.01 + (rand.Float64() * 0.02),
-			Speed:          0.02 + (rand.Float64() * 0.04),
 			Range:          0.01 + (rand.Float64() * 0.02),
 			Perception:     0.1 + (rand.Float64() * 0.1),
 		}
@@ -127,8 +128,7 @@ func loop() {
 
 		//Every 20 iterations spawn new organisms around edge
 		if iteration%spawnRate == 0 {
-			count := rand.Intn(organismCount / 2)
-
+			count := rand.Intn(spawnCount)
 			for i := 0; i < count; i++ {
 				family := families[i%numFamilyTypes]
 				organism := sim.NewOrganism(family)
@@ -161,7 +161,6 @@ func loop() {
 		err := store("state", iteration, organisms)
 		if err != nil {
 			log.Error(err)
-			time.Sleep(time.Duration(1000) * time.Millisecond)
 			continue
 		}
 
@@ -169,7 +168,6 @@ func loop() {
 		err = store("update", iteration, updates)
 		if err != nil {
 			log.Error(err)
-			time.Sleep(time.Duration(1000) * time.Millisecond)
 			continue
 		}
 

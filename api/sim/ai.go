@@ -1,6 +1,6 @@
 package sim
 
-// Returns results from an organisms perception test
+// ApplyAI applies the ai state.
 func ApplyAI(update *Update, updates map[string]*Update, organism *Organism, perception *PerceptionResults) {
 	switch organism.State.Type {
 	case "alive":
@@ -11,9 +11,6 @@ func ApplyAI(update *Update, updates map[string]*Update, organism *Organism, per
 		break
 	case "attack":
 		AttackAI(update, updates, organism, perception)
-		break
-	case "dead":
-		DeadAI(update, updates, organism, perception)
 		break
 	}
 }

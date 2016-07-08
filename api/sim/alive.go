@@ -27,7 +27,7 @@ func clampToBounds(vec *mgl32.Vec3) {
 	}
 }
 
-// AliveAI processes the organism for the given state
+// AliveAI processes the organism for the given state.
 func AliveAI(update *Update, updates map[string]*Update, organism *Organism, perception *PerceptionResults) {
 	if organism.State.Energy > 0.5 &&
 		organism.State.Maturity > 0.5 &&

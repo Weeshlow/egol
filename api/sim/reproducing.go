@@ -32,7 +32,7 @@ func reproduce(update *Update, updates map[string]*Update, organism *Organism) {
 	}
 }
 
-// ReproduceAI processes the organism for the given state
+// ReproduceAI processes the organism for the given state.
 func ReproduceAI(update *Update, updates map[string]*Update, organism *Organism, perception *PerceptionResults) {
 	if organism.State.Energy > 0.5 &&
 		len(perception.Threats) == 0 {

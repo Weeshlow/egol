@@ -23,10 +23,10 @@ type Attributes struct {
 	Family         uint32  `json:"family"`
 	Offense        float64 `json:"offense"`
 	Defense        float64 `json:"defense"`
+	Agility        float64 `json:"speed"`
 	Reproductivity float64 `json:"reproductivity"`
 	Range          float64 `json:"range"`
 	Perception     float64 `json:"perception"`
-	Speed          float64 `json:"speed"`
 }
 
 // Organism represents a single autonomous organism.
@@ -41,6 +41,7 @@ func mutate(value, variance, min, max float64) float64 {
 	return math.Min(max, math.Max(min, value+mutation))
 }
 
+// NewOrganism returns a new organism.
 func NewOrganism(baseAttributes *Attributes) *Organism {
 	return &Organism{
 		ID: util.RandID(),
@@ -52,16 +53,17 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 		},
 		Attributes: &Attributes{
 			Family:         baseAttributes.Family,
-			Offense:        mutate(baseAttributes.Offense, 0.01, 0, 1.0),
-			Defense:        mutate(baseAttributes.Defense, 0.01, 0, 1.0),
-			Reproductivity: mutate(baseAttributes.Reproductivity, 0.01, 0.1, 0.5),
-			Perception:     mutate(baseAttributes.Perception, 0.01, 0, 1.0),
-			Range:          mutate(baseAttributes.Range, 0.01, 0, 1.0),
-			Speed:          mutate(baseAttributes.Speed, 0.01, 0, 1.0),
+			Offense:        mutate(baseAttributes.Offense, 0.005, 0.01, 1.0),
+			Defense:        mutate(baseAttributes.Defense, 0.005, 0.01, 1.0),
+			Agility:        mutate(baseAttributes.Agility, 0.005, 0.01, 1.0),
+			Reproductivity: mutate(baseAttributes.Reproductivity, 0.005, 0.1, 0.5),
+			Perception:     mutate(baseAttributes.Perception, 0.005, 0.1, 0.3),
+			Range:          mutate(baseAttributes.Range, 0.005, 0.01, 1.0),
 		},
 	}
 }
 
+// Update applies the provided update to the organism.
 func (o *Organism) Update(update *Update) {
 	o.State.Type = update.State.Type
 	o.State.Position = update.State.Position
@@ -69,26 +71,32 @@ func (o *Organism) Update(update *Update) {
 	o.State.Maturity = update.State.Maturity
 }
 
+// Speed returns the current movement rate.
 func (o *Organism) Speed() float64 {
-	return 0.01 + (o.Attributes.Speed * o.Size())
+	return 0.01 + (o.Attributes.Agility * o.Size())
 }
 
+// Size returns the current size.
 func (o *Organism) Size() float64 {
 	return 0.005 + (o.State.Maturity * o.State.Energy * 0.01)
 }
 
+// Attack returns the current attack potential.
 func (o *Organism) Attack() float64 {
 	return o.Size() * o.Attributes.Offense
 }
 
+// Defense returns the current defense potential.
 func (o *Organism) Defense() float64 {
 	return o.Size() * o.Attributes.Defense
 }
 
+// InRange returns if another organism is within attack range.
 func (o *Organism) InRange(dist float64, other *Organism) bool {
 	return (dist - other.Size() - o.Size()) < o.Attributes.Range
 }
 
+// Perceive returns true if the organism is close enough to be perceived.
 func (o *Organism) Perceive(other *Organism) (float64, bool) {
 	diff := other.State.Position.Sub(o.State.Position)
 	dist := float64(diff.Len())
@@ -99,6 +107,7 @@ func (o *Organism) Perceive(other *Organism) (float64, bool) {
 	return 0, false
 }
 
+// Spawn creates a new offspring.
 func (o *Organism) Spawn() *Organism {
 	offspring := NewOrganism(o.Attributes)
 	noise := util.RandomDirection().Mul(float32(rand.Float64() * o.Size()))
