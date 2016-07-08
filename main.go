@@ -150,6 +150,10 @@ func loop() {
 				}
 			} else {
 				organisms[key].Update(update)
+				// remove dead entities
+				if organisms[key].State.Type == "dead" {
+					delete(organisms, key)
+				}
 			}
 		}
 
