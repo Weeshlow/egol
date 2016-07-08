@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	energyDepletion = 0.001
+	energyDepletion = 0.005
 	growth          = 0.04
 )
 
@@ -17,7 +17,7 @@ func ApplyConstraints(update *Update) {
 
 func updateEnergy(update *Update) {
 	state := update.State
-	update.State.Energy = update.State.Energy - energyDepletion
+	update.State.Energy -= energyDepletion
 	if state.Energy <= 0 {
 		// update state is dead
 		update.State.Type = "dead"

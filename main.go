@@ -14,7 +14,6 @@ import (
 	log "github.com/unchartedsoftware/plog"
 	"github.com/zenazn/goji/graceful"
 	"github.com/zenazn/goji/web"
-	"github.com/go-gl/mathgl/mgl32"
 
 	"github.com/unchartedsoftware/egol/api/conf"
 	"github.com/unchartedsoftware/egol/api/middleware"
@@ -28,6 +27,7 @@ const (
 	websocketRoute = "/connect"
 	numFamilyTypes = 5
 	organismCount  = 50
+	spawnRate      = 50
 )
 
 var (
@@ -129,33 +129,12 @@ func loop() {
 		updates := sim.Iterate(organisms)
 
 		//Every 20 iterations spawn new organisms around edge
-		if iteration % 30 == 0 {
+		if iteration%spawnRate == 0 {
 			count := rand.Intn(organismCount / 2)
 
 			for i := 0; i < count; i++ {
 				family := families[i%numFamilyTypes]
 				organism := sim.NewOrganism(family)
-
-				x := rand.Float64();
-				y := rand.Float64();
-				if (rand.Float64() < 0.5) {
-					if x < 0.5 {
-						x = 0 + - rand.Float64()*0.02;
-					} else {
-						x = 1 - rand.Float64()*0.02;
-					}
-				} else {
-					if y < 0.5 {
-						y = 0 + - rand.Float64()*0.02;
-					} else {
-						y = 1 - rand.Float64()*0.02;
-					}	
-				}
-				organism.State.Position = mgl32.Vec3{
-					float32(x),
-					float32(y),
-					0.0,
-				}
 				updates[organism.ID] = &sim.Update{
 					ID:         organism.ID,
 					State:      organism.State,

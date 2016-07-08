@@ -5,5 +5,5 @@ uniform highp mat4 uViewMatrix;
 uniform highp mat4 uProjectionMatrix;
 
 void main(){
-    gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+	gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 }

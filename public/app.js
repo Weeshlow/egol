@@ -21,6 +21,7 @@
 	var organisms = {};
 	var updates = {};
 	var last;
+	var debug = false;
 
 	function getWindowSize() {
 		var devicePixelRatio = window.devicePixelRatio || 1;
@@ -43,7 +44,15 @@
 		}
 	}
 
+	function onKey() {
+		var CODE = 'q'.charCodeAt(0);
+		if (event.keyCode === CODE) {
+			debug = !debug;
+		}
+	}
+
 	window.addEventListener('resize', onResize);
+	window.addEventListener('keypress', onKey);
 
 	function render(organism, update, t) {
 		if (update) {
@@ -60,7 +69,7 @@
 		shader.setUniform('uColor', organism.color());
 		organism.draw();
 
-		if (organism.state.type !== 'dead') {
+		if (debug && organism.state.type !== 'dead') {
 			// draw perception range
 			shader.setUniform('uModelMatrix', organism.perception(1));
 			shader.setUniform('uColor', [0.5, 0.5, 0.5, 0.05]);
