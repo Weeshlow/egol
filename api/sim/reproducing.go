@@ -6,15 +6,15 @@ import (
 )
 
 const (
-	baseEnergyCost = 0.2
+	baseEnergyCost = 0.4
 	baseAttempts   = 3
 )
 
 func reproduce(update *Update, updates map[string]*Update, organism *Organism) {
 	attributes := organism.Attributes
-	energyCost := (baseEnergyCost - attributes.Reproductivity)
+	energyCost := math.Max(0.1, baseEnergyCost-attributes.Reproductivity)
 	for i := 0; i < baseAttempts; i++ {
-		if update.State.Energy < baseEnergyCost {
+		if update.State.Energy < energyCost {
 			break
 		}
 		if rand.Float64() < attributes.Reproductivity {

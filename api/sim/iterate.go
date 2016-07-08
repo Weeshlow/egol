@@ -2,7 +2,7 @@ package sim
 
 // Iterate applies one iteration of AI and returns the change in state as
 // a map of changes.
-func Iterate(organisms map[string]*Organism, delta int64) map[string]*Update {
+func Iterate(organisms map[string]*Organism) map[string]*Update {
 	updates := make(map[string]*Update)
 
 	// ensure an update is available for all orgs
@@ -29,7 +29,7 @@ func Iterate(organisms map[string]*Organism, delta int64) map[string]*Update {
 		ApplyAI(update, updates, organism, PerceptionTest(organism, organisms))
 
 		// apply constraints
-		ApplyConstraints(update, delta)
+		ApplyConstraints(update)
 	}
 
 	return updates

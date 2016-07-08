@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -83,7 +82,7 @@ func initializeSim() {
 			Offense:        0.01 + (rand.Float64() * 0.02),
 			Defense:        0.01 + (rand.Float64() * 0.02),
 			Agility:        0.01 + (rand.Float64() * 0.02),
-			Reproductivity: math.Min(0.1, math.Max(0.9, rand.Float64())),
+			Reproductivity: 0.01 + (rand.Float64() * 0.02),
 			// coordniate based
 			Speed:      0.01 + (rand.Float64() * 0.05),
 			Range:      0.01 + (rand.Float64() * 0.03),
@@ -124,7 +123,7 @@ func loop() {
 		}
 
 		// apoply constraints and determine AI input for each organism
-		updates := sim.Iterate(organisms, config.FrameMS)
+		updates := sim.Iterate(organisms)
 
 		// apply updates to the state before next iteration
 		for key, update := range updates {
@@ -143,7 +142,6 @@ func loop() {
 		err := store("state", iteration, organisms)
 		if err != nil {
 			log.Error(err)
-			time.Sleep(time.Duration(1000) * time.Millisecond)
 			continue
 		}
 
@@ -151,7 +149,6 @@ func loop() {
 		err = store("update", iteration, updates)
 		if err != nil {
 			log.Error(err)
-			time.Sleep(time.Duration(1000) * time.Millisecond)
 			continue
 		}
 
