@@ -6,6 +6,7 @@
 - [Go](https://golang.org/) version 1.6, or version 1.5 with the `GO15VENDOREXPERIMENT` environment variable set to `1`.
 - [NodeJS](http://nodejs.org/) JavaScript runtime.
 - [gulp](http://http://gulpjs.com/) build toolkit (npm install gulp -g).
+- [redis](http://redis.io/) in-memory data structure store.
 
 ## Development
 ---
@@ -22,6 +23,12 @@ Install dependencies
 ```bash
 cd egol
 make deps
+```
+
+Start redis instance:
+
+```bash
+redis-server
 ```
 
 Run the server:
