@@ -15,7 +15,6 @@ func Iterate(organisms map[string]*Organism, delta int64) map[string]*Update {
 				Energy:   organism.State.Energy,
 				Size:     organism.State.Size,
 				Position: organism.State.Position,
-				Rotation: organism.State.Rotation,
 				Maturity: organism.State.Maturity,
 			},
 		}

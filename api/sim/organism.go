@@ -15,7 +15,6 @@ type State struct {
 	Type     string     `json:"type"`
 	Size     float64    `json:"size"`
 	Position mgl32.Vec3 `json:"position"`
-	Rotation float64    `json:"rotation"`
 	Energy   float64    `json:"energy"`
 	Maturity float64    `json:"maturity"`
 }
@@ -54,7 +53,6 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 			Type:     "alive",
 			Position: util.RandomPosition(),
 			Maturity: 0.0,
-			Rotation: 0.0,
 			Energy:   0.8 + rand.Float64()*0.2,
 			Size:     mutate(baseAttributes.OffspringSize, 0.01, 0.01, 0.2),
 		},
@@ -78,7 +76,6 @@ func (o *Organism) Update(update *Update) {
 	o.State.Type = update.State.Type
 	o.State.Size = update.State.Size
 	o.State.Position = update.State.Position
-	o.State.Rotation = update.State.Rotation
 	o.State.Energy = update.State.Energy
 	o.State.Maturity = update.State.Maturity
 }

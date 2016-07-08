@@ -12,7 +12,7 @@
         if (!buffer) {
             var COMPONENT_BYTE_SIZE = 4;
             var theta = (2 * Math.PI) / numSegments;
-            var radius = 1.0;
+            var radius = 0.5;
             // precalculate sine and cosine
             var c = Math.cos(theta);
             var s = Math.sin(theta);
@@ -93,10 +93,7 @@
         }
         matrix() {
             var translation = this.state.position;
-            var rotation = glm.quat.rotateZ(
-                glm.quat.create(),
-                glm.quat.identity(glm.quat.create()),
-                this.state.rotation);
+            var rotation = glm.quat.identity(glm.quat.create());
             var scale = glm.vec3.fromValues(
                 this.state.size,
                 this.state.size,

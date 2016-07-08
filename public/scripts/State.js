@@ -14,15 +14,11 @@
             this.size = spec.size;
             // energy
             this.energy = (spec.energy !== undefined) ? spec.energy : 1.0;
-            // attacking
-            this.target = spec.target;
             // position
             this.position = spec.position ? glm.vec3.fromValues(
                 spec.position.x || spec.position[0] || 0,
                 spec.position.y || spec.position[1] || 0,
                 spec.position.z || spec.position[2] || 0) : glm.vec3.create();
-            // rotation
-            this.rotation = spec.rotation || 0;
             // Maturity
             this.maturity = spec.maturity;
         }
@@ -40,18 +36,25 @@
             // iterpolate size
             let size = this.size * (1-t) + state.size * t;
 
+            // iterpolate maturity
+            let maturity = this.size * (1-t) + state.maturity * t;
+
+            // iterpolate energy
+            let energy = this.size * (1-t) + state.energy * t;
+
             return new State({
                 type: state.type,
-                position: position,
                 size: size,
-                rotation: this.rotation,
+                energy: energy,
+                position: position,
+                maturity: maturity
             });
         }
         update(update) {
+            this.type = update.type;
             this.size = update.size;
             this.energy = update.energy;
             this.position = update.position;
-            this.rotation = update.rotation;
             this.maturity = update.maturity;
         }
     }

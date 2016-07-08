@@ -95,7 +95,7 @@ func initializeSim() {
 
 	// Initialize organisms. Add random variation from family
 	for i := 0; i < organismCount; i++ {
-		family := families[rand.Intn(familyCount-1)]
+		family := families[i%familyCount]
 		organism := sim.NewOrganism(family)
 		organisms[organism.ID] = organism
 	}
