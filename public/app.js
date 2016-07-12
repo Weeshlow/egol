@@ -26,10 +26,6 @@
 	function getWindowSize() {
 		var devicePixelRatio = window.devicePixelRatio || 1;
 		return window.innerWidth * devicePixelRatio;
-		// return {
-		// 	width: window.innerWidth * devicePixelRatio,
-		// 	height: window.innerHeight * devicePixelRatio
-		// };
 	}
 
 	function onResize() {
@@ -87,7 +83,7 @@
 
 	function frameLength() {
 		var sum = 0;
-		frames.forEach(function(frame) {
+		frames.forEach(frame => {
 			sum += frame;
 		});
 		return sum / (frames.length || 1);
@@ -135,7 +131,7 @@
 			organisms[org.id] = new Organism(org);
 		});
 		// update timestamp
-		last =  Date.now();
+		last = Date.now();
 	}
 
 	function handleUpdate(newUpdates) {
@@ -178,7 +174,7 @@
 			shader = new esper.Shader({
 				vert: 'shaders/organism.vert',
 				frag: 'shaders/organism.frag'
-			}, function() {
+			}, () => {
 				// create websocket connection
 				listener = new Listener(
 					'connect',

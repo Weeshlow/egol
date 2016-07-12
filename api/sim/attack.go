@@ -12,7 +12,7 @@ func AttackAI(update *Update, updates map[string]*Update, organism *Organism, pe
 		for _, other := range perception.Threats {
 			if organism.InRange(other.Distance, other.Organism) {
 				// in attack range, lets attack
-				dmg := organism.Attack() - other.Organism.Defense() + (0.2 * rand.Float64())
+				dmg := organism.Attack() - other.Organism.Defense() + (0.1 * rand.Float64())
 				dmg = math.Max(0.0, math.Min(1.0, dmg))
 				updates[other.Organism.ID].State.Energy -= dmg
 				update.State.Energy += dmg

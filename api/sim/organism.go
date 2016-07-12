@@ -58,7 +58,7 @@ func NewOrganism(baseAttributes *Attributes) *Organism {
 			Agility:        mutate(baseAttributes.Agility, 0.005, 0.01, 1.0),
 			Reproductivity: mutate(baseAttributes.Reproductivity, 0.005, 0.1, 0.5),
 			Perception:     mutate(baseAttributes.Perception, 0.005, 0.1, 0.3),
-			Range:          mutate(baseAttributes.Range, 0.005, 0.01, 1.0),
+			Range:          mutate(baseAttributes.Range, 0.005, 0.01, 0.1),
 		},
 	}
 }

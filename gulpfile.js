@@ -21,9 +21,8 @@
 		serverRoot: './main.go',
 		webappRoot: PUBLIC_DIR + '/app.js',
 		go: [ './api/**/*.go', './main.go' ],
-		templates: [ PUBLIC_DIR + 'templates/**/*.hbs'],
-		scripts: [ PUBLIC_DIR + 'scripts/**/*.js',  PUBLIC_DIR + 'app.js' ],
-		styles: [ PUBLIC_DIR + 'styles/reset.css',  PUBLIC_DIR + 'styles/**/*.css' ],
+		scripts: [ PUBLIC_DIR + 'scripts/**/*.js', PUBLIC_DIR + 'app.js' ],
+		styles: [ PUBLIC_DIR + 'styles/**/*.css' ],
 		index: [ PUBLIC_DIR + 'index.html' ],
 		resources: [
 			PUBLIC_DIR + 'index.html',
@@ -70,8 +69,7 @@
 	});
 
 	gulp.task('lint', function() {
-		return gulp.src([ PUBLIC_DIR + '/**/*.js',
-			'!'+PUBLIC_DIR+'/extern/**/*.js'])
+		return gulp.src(paths.scripts)
 			.pipe(jshint('.jshintrc'))
 			.pipe(jshint.reporter('jshint-stylish'));
 	});
@@ -81,7 +79,9 @@
 			bundler = browserify(paths.webappRoot, {
 				debug: true,
 				standalone: PROJECT_NAME
-			}).transform(babel, {presets: ['es2015']});
+			}).transform(babel, {
+				presets: [ 'es2015' ]
+			});
 		return bundle(bundler, true);
 	});
 
@@ -89,6 +89,8 @@
 		var bundler = browserify(paths.webappRoot, {
 			debug: true,
 			standalone: PROJECT_NAME
+		}).transform(babel, {
+			presets: [ 'es2015' ]
 		});
 		return bundle(bundler, false);
 	});

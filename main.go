@@ -85,7 +85,7 @@ func initializeSim() {
 			Offense:        0.01 + (rand.Float64() * 0.02),
 			Defense:        0.01 + (rand.Float64() * 0.02),
 			Agility:        0.02 + (rand.Float64() * 0.04),
-			Reproductivity: 0.01 + (rand.Float64() * 0.02),
+			Reproductivity: 0.1 + (rand.Float64() * 0.1),
 			Range:          0.01 + (rand.Float64() * 0.02),
 			Perception:     0.1 + (rand.Float64() * 0.1),
 		}
@@ -126,7 +126,7 @@ func loop() {
 		// apoply constraints and determine AI input for each organism
 		updates := sim.Iterate(organisms)
 
-		//Every 20 iterations spawn new organisms around edge
+		// every N iterations spawn new organisms around edge
 		if iteration%spawnRate == 0 {
 			count := rand.Intn(spawnCount)
 			for i := 0; i < count; i++ {
@@ -171,8 +171,6 @@ func loop() {
 			continue
 		}
 
-		log.Info("Iteration: ", iteration)
-
 		for iter := range clients.Iter() {
 			client, ok := iter.Val.(*ws.Client)
 			if !ok {
@@ -201,12 +199,16 @@ func loop() {
 					log.Error(err)
 				}
 				client.New = false
+				client.New = false
 			}
 		}
 
 		// wait
 		now := util.Timestamp()
 		elapsed := now - stamp
+
+		log.Infof("Iteration: %d computed in %d ms", iteration, elapsed)
+
 		if elapsed < config.FrameMS {
 			time.Sleep(time.Duration(config.FrameMS-elapsed) * time.Millisecond)
 		}
